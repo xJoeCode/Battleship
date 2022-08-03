@@ -1,21 +1,30 @@
 #gameTile{
-    background-color: rgb(107, 107, 107);
-    width: 100%;
+    background-color: #8C6636;
+    width: auto;
     height: auto;
     aspect-ratio: 1/1;
-    border: 2px solid black;
+    margin: 0;
+    border: 1px solid black;
+    cursor: pointer;
+}
+#gameTile:hover{
+    background-color: #8C4236;
 }
 
 .gameContainer{
-    width: 60%;
-    height: 60%;
+    width: 50%;
+    height: auto;
+    overflow: hidden;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
 }
 
 body{
+    background-color: #264559;
     display: flex;
     justify-content: center;
+    align-items: center;
     height: 100vh;
+    width: 100%;
 }
