@@ -1,0 +1,21 @@
+#gameTile{
+    background-color: rgb(107, 107, 107);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    border: 2px solid black;
+}
+
+.gameContainer{
+    width: 60%;
+    height: 60%;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
