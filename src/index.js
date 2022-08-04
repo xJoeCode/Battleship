@@ -1,4 +1,5 @@
 import "./style.css";
+import explosionIcon from './Assets/explosion.png'
 
 const ship = (length, orient) =>{
     const getLength = () => length
@@ -48,10 +49,21 @@ const generateboard = () => {
     gameTile.remove()
 }
 
-const checkHits = () =>{
+const checkHits = () => {
+    
+    const addHItIcon = (hit) => {
+        const hitTile = document.querySelector(`[data-key="${hit}"]`)
+        const hitImage = document.createElement('img')
+        hitImage.classList.add("hitImage")
+        hitImage.src = explosionIcon
+        hitTile.appendChild(hitImage)
+    }
     console.log(hits)
     let hit = allShipPos.filter(position =>  hits.includes(position))
-    console.log(hit)
+    hit.forEach(hit => {
+            addHItIcon(hit)
+        })
+    
 }
 
 
