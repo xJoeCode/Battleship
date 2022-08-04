@@ -7,15 +7,34 @@ const ship = (length, orient) =>{
     let hit = []
 
     const shipPos = (() => {
-       const initialPos = Math.floor(Math.random()*100)
+       let initialPos = Math.floor(Math.random()*100 + 1)
+
        if(orient === "landscape"){
+
+        const checkPos = () =>{
+            for (let i = 0; i < length; i++){
+               let testPos = (initialPos + i)
+               if (testPos % 10 == 0){
+                return true
+                    } 
+                }
+            }
+
+            if(checkPos()) {
+                initialPos = initialPos - length
+                }
             for (let i = 0; i < length; i++){
                 position.push(initialPos + i)
             }
        } else if (orient === "portrait"){
+        // to make sure all positions are in the gameboard
+        const lastPos = initialPos + (length*10)
+        if(lastPos > 100){
+            initialPos = initialPos - (length * 10)
+        }
         for (let i = 0; i < length; i++){
             position.push(initialPos + (i*10))
-        }
+            }
        }
     })()
     return {getLength, position}
@@ -50,13 +69,15 @@ const generateboard = () => {
 }
 
 const checkHits = () => {
-    
+
     const addHItIcon = (hit) => {
         const hitTile = document.querySelector(`[data-key="${hit}"]`)
-        const hitImage = document.createElement('img')
-        hitImage.classList.add("hitImage")
-        hitImage.src = explosionIcon
-        hitTile.appendChild(hitImage)
+        if (!hitTile.hasChildNodes()){
+            const hitImage = document.createElement('img')
+            hitImage.classList.add("hitImage")
+            hitImage.src = explosionIcon
+            hitTile.appendChild(hitImage)
+        }
     }
     console.log(hits)
     let hit = allShipPos.filter(position =>  hits.includes(position))
