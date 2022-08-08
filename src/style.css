@@ -1,6 +1,10 @@
+:root{
+    --main-font: 'Source Serif Pro', serif;
+}
+
 #gameTile{
     background-color: #8C6636;
-    width: auto;
+    width: 50px;
     height: auto;
     aspect-ratio: 1/1;
     margin: 0;
@@ -17,9 +21,12 @@
     background-color: #5B2820;
 }
 
+
+
 .gameContainer{
-    width: 50%;
+    width: auto;
     height: auto;
+    justify-items: center;
     overflow: hidden;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -30,6 +37,50 @@
     width: 50px;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.formContainer{
+    position: fixed;
+    background-color: #8C4236;
+    z-index: 2;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 1s ease-in-out;
+}
+
+.formContainer.moved{
+    transform: translateY( 100vh) rotate(180deg);
+}
+
+#form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="text"]{
+    width: 80%;
+    height: 3rem;
+    background-color:  transparent;
+    border: none;
+    border-bottom: 1px solid black;
+    text-align: center;
+    font-family: var(--main-font);
+    font-size: 2rem;
+}
+
+input[type="text"]:focus{
+    outline: none;
+}
+
+h1{
+    font-family: var(--main-font);
+    font-size: 2rem;
 }
 
 body{

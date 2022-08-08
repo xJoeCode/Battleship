@@ -1,12 +1,26 @@
+import "./cssReset.css"
 import "./style.css";
 import explosionIcon from "./Assets/explosion.png";
-import SinkIcon from "./Assets/sinking.png"
+import SinkIcon from "./Assets/sinking.png";
 
-const ship = (length, orient) => {
+class player {
+    
+    constructor(name){
+        this.name = name
+    }
+    turn = 0
+}
+
+//let john = new player("john")
+//let Tim = new player("Tim")
+
+//console.log(john)
+
+const ship = (length, orient, player) => {
     const getLength = () => length;
+    const getPlayer = () => player;
     let position = [];
     let hits = [];
-
 
     const shipPos = (() => {
         let initialPos = Math.floor(Math.random() * 100 + 1);
@@ -38,14 +52,14 @@ const ship = (length, orient) => {
             }
         }
     })();
-    return { getLength, position, hits };
+    return { getLength, position, hits ,player };
 };
 
 const albama = ship(3, "landscape");
 const chicken = ship(4, "portrait");
-let allShipPos = [];
-allShipPos.push(...chicken.position);
-allShipPos.push(...albama.position);
+//let allShipPos = [];
+//allShipPos.push(...chicken.position);
+//allShipPos.push(...albama.position);
 let allShips = [albama, chicken];
 console.log(allShips);
 
@@ -63,7 +77,7 @@ const generateboard = () => {
             console.log(hitNum);
             totalHits.push(hitNum);
             checkHits();
-            checkShipDestroyed()
+            checkShipDestroyed();
         };
         gameContainer.appendChild(tile);
     }
@@ -82,40 +96,70 @@ const checkHits = () => {
     };
     console.log(totalHits);
 
-    allShips.forEach(ship => {
-        let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum))
-        ship.hits = [...hit]
+    allShips.forEach((ship) => {
+        let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum));
+        ship.hits = [...hit];
         hit.forEach((hit) => {
             addHItIcon(hit);
         });
-    })
-    console.log(allShips)
+    });
+    console.log(allShips);
 
-  //  let hit = allShipPos.filter((position) => hits.includes(position));
-  //  hit.forEach((hit) => {
-  //      addHItIcon(hit);
-  //  });
+    //  let hit = allShipPos.filter((position) => hits.includes(position));
+    //  hit.forEach((hit) => {
+    //      addHItIcon(hit);
+    //  });
 };
 
-const checkShipDestroyed = () =>{
-    allShips.forEach(ship => {
-       //let checkForDestroyed = ship.position.every(pos => totalHits.includes(pos))
-       let checkForDestroyed = ship.position.every(pos => ship.hits.includes(pos))
-       if (checkForDestroyed){
-        destroyShip(ship)
-       }
-       //console.log(checkForDestroyed)
-       //console.log(ship.position)
-       //console.log(ship.hits)
-    })
-}
+const checkShipDestroyed = () => {
+    allShips.forEach((ship) => {
+        //let checkForDestroyed = ship.position.every(pos => totalHits.includes(pos))
+        let checkForDestroyed = ship.position.every((pos) => ship.hits.includes(pos));
+        if (checkForDestroyed) {
+            destroyShip(ship);
+        }
+        //console.log(checkForDestroyed)
+        //console.log(ship.position)
+        //console.log(ship.hits)
+    });
+};
 
-const destroyShip = (ship) =>{
-    ship.position.forEach( number => {
-        const shipPos = document.querySelector(`[data-key="${number}"]`)
-        shipPos.firstChild.src = SinkIcon
-        console.log(shipPos)
-    })
-}
+const destroyShip = (ship) => {
+    ship.position.forEach((number) => {
+        const shipPos = document.querySelector(`[data-key="${number}"]`);
+        shipPos.firstChild.src = SinkIcon;
+        console.log(shipPos);
+    });
+};
 
 generateboard();
+
+
+const nameInput = (() =>{
+    const player1field = document.querySelector("#text")
+    const formContainer = document.querySelector(".formContainer")
+    player1field.onkeypress = function getplayersname(e){
+        if (e.keyCode == 13){
+            e.preventDefault()
+            getplayer1Name(e)
+            //player1field.removeEventListener("keypress", getplayersname())
+        }
+    }
+    const getplayer1Name = (e) =>{
+        console.log(player1field.value)
+        let player1 = new player(`${player1field.value}`)
+        player1field.value = ""
+        const formHeader = document.querySelector("#formHeader")
+        formHeader.textContent = "Welcome Player 2, Enter your name:"
+        player1field.onkeypress = function(a){getplayer2name(a, player1)}
+    }
+    const getplayer2name = (a, player1) =>{
+        if (a.keyCode == 13){
+            a.preventDefault()
+            let player2 = new player(`${player1field.value}`)
+            player1field.value = ""
+            formContainer.classList.add("moved")
+
+        }
+    }
+})()
