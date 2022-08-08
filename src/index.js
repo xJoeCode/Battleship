@@ -113,7 +113,6 @@ const checkHits = () => {
 
 const checkShipDestroyed = () => {
     allShips.forEach((ship) => {
-        //let checkForDestroyed = ship.position.every(pos => totalHits.includes(pos))
         let checkForDestroyed = ship.position.every((pos) => ship.hits.includes(pos));
         if (checkForDestroyed) {
             destroyShip(ship);
@@ -136,30 +135,42 @@ generateboard();
 
 
 const nameInput = (() =>{
-    const player1field = document.querySelector("#text")
+    const playerfield = document.querySelector("#text")
     const formContainer = document.querySelector(".formContainer")
-    player1field.onkeypress = function getplayersname(e){
+    const shipformContainer = document.querySelector(".shipFormContainer")
+    playerfield.onkeypress = function getplayersname(e){
         if (e.keyCode == 13){
             e.preventDefault()
             getplayer1Name(e)
-            //player1field.removeEventListener("keypress", getplayersname())
+            //playerfield.removeEventListener("keypress", getplayersname())
         }
     }
     const getplayer1Name = (e) =>{
-        console.log(player1field.value)
-        let player1 = new player(`${player1field.value}`)
-        player1field.value = ""
+        console.log(playerfield.value)
+        let player1 = new player(`${playerfield.value}`)
+        playerfield.value = ""
         const formHeader = document.querySelector("#formHeader")
         formHeader.textContent = "Welcome Player 2, Enter your name:"
-        player1field.onkeypress = function(a){getplayer2name(a, player1)}
+        playerfield.onkeypress = function(a){getplayer2name(a, player1)}
     }
     const getplayer2name = (a, player1) =>{
         if (a.keyCode == 13){
             a.preventDefault()
-            let player2 = new player(`${player1field.value}`)
-            player1field.value = ""
+            let player2 = new player(`${playerfield.value}`)
+            playerfield.value = ""
             formContainer.classList.add("moved")
+            shipformContainer.classList.add("moved")
+            formHeader.textContent = "Enter the number of ships for each player:"
+            playerfield.onkeypress = function(b){generateShips(b, player1, player2)}
+        }
+    }
 
+
+
+    const generateShips = (b, player1, player2) => {
+        if (b.keyCode ==13){
         }
     }
 })()
+
+
