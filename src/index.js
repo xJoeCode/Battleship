@@ -21,8 +21,10 @@ const ship = (length, orient, player) => {
     const getPlayer = () => player;
     let position = [];
     let hits = [];
+    
+   
 
-    const shipPos = (() => {
+    const shipPos = (player) => {
         let initialPos = Math.floor(Math.random() * 100 + 1);
 
         if (orient === "landscape") {
@@ -39,7 +41,8 @@ const ship = (length, orient, player) => {
                 initialPos = initialPos - length;
             }
             for (let i = 0; i < length; i++) {
-                position.push(initialPos + i);
+                
+                position.push(player + (initialPos + i));
             }
         } else if (orient === "portrait") {
             // to make sure all positions are in the gameboard
@@ -48,15 +51,16 @@ const ship = (length, orient, player) => {
                 initialPos = initialPos - length * 10;
             }
             for (let i = 0; i < length; i++) {
-                position.push(initialPos + i * 10);
+                position.push(player + (initialPos + i * 10));
             }
         }
-    })();
+    };
+shipPos(player)
     return { getLength, position, hits ,player };
 };
 
-const albama = ship(3, "landscape");
-const chicken = ship(4, "portrait");
+const albama = ship(3, "landscape", "playerOne");
+const chicken = ship(4, "portrait", "playerTwo");
 //let allShipPos = [];
 //allShipPos.push(...chicken.position);
 //allShipPos.push(...albama.position);
@@ -68,16 +72,16 @@ let totalHits = [];
 const generateboard = () => {
     const player1gameTile = document.querySelector("#player1GameTile");
     const player2gameTile = document.querySelector("#player2GameTile");
-    const playerTiles = [player1gameTile, player2gameTile ]
     const gameContainer1 = document.querySelector(".gameContainer1");
     const gameContainer2 = document.querySelector(".gameContainer2");
+    const playerTiles = [player1gameTile, player2gameTile]
     playerTiles.forEach(playerTile => {
         for (let i = 0; i < 100; i++) {
             const tile = playerTile.cloneNode();
             tile.setAttribute("data-key", i + 1);
             tile.onclick = function (e) {
                 tile.classList.add("hit");
-                const hitNum = parseInt(e.target.getAttribute("data-key"));
+                const hitNum = e.target.getAttribute("data-id") +  e.target.getAttribute("data-key");
                 console.log(hitNum);
                 totalHits.push(hitNum);
                 checkHits();
@@ -110,7 +114,10 @@ const generateboard = () => {
 
 const checkHits = () => {
     const addHItIcon = (hit) => {
-        const hitTile = document.querySelector(`[data-key="${hit}"]`);
+        const dataid = hit.substr(0,9)
+        const datakey = hit.substr(9,12)
+        console.log(datakey)
+        const hitTile = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
         if (!hitTile.hasChildNodes()) {
             const hitImage = document.createElement("img");
             hitImage.classList.add("hitImage");
@@ -121,6 +128,7 @@ const checkHits = () => {
     console.log(totalHits);
 
     allShips.forEach((ship) => {
+        console.log(ship)
         let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum));
         ship.hits = [...hit];
         hit.forEach((hit) => {
@@ -149,7 +157,9 @@ const checkShipDestroyed = () => {
 
 const destroyShip = (ship) => {
     ship.position.forEach((number) => {
-        const shipPos = document.querySelector(`[data-key="${number}"]`);
+        const dataid = number.substr(0,9)
+        const datakey = number.substr(9,12)
+        const shipPos = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
         shipPos.firstChild.src = SinkIcon;
         console.log(shipPos);
     });
