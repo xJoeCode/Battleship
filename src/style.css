@@ -2,7 +2,7 @@
     --main-font: 'Source Serif Pro', serif;
 }
 
-#gameTile{
+#player1GameTile, #player2GameTile{
     background-color: #8C6636;
     width: 50px;
     height: auto;
@@ -23,7 +23,8 @@
 
 
 
-.gameContainer{
+.gameContainer1, .gameContainer2{
+    margin: 1rem;
     width: auto;
     height: auto;
     justify-items: center;
@@ -73,6 +74,10 @@
     transform: translateY( 0vh) rotate(0deg);
     opacity: 1;
 }
+.shipFormContainer.moved.slideDown{
+    transform: translateY(-100vh) rotate(180deg);
+    opacity: 1;
+}
 
 .formContainer.moved{
     transform: translateY( 100vh) rotate(180deg);
@@ -104,6 +109,15 @@ h1{
     margin-bottom: 20px;
     font-family: var(--main-font);
     font-size: 2rem;
+}
+
+button{
+    width: 200px;
+    height: 50px;
+    background-color: #28683B;
+    box-shadow: 2px 2px 2px rgb(53, 53, 53);
+    cursor: pointer;
+    border: none;
 }
 
 label{

@@ -66,22 +66,46 @@ console.log(allShips);
 let totalHits = [];
 
 const generateboard = () => {
-    const gameTile = document.querySelector("#gameTile");
-    const gameContainer = document.querySelector(".gameContainer");
-    for (let i = 0; i < 100; i++) {
-        const tile = gameTile.cloneNode();
-        tile.setAttribute("data-key", i + 1);
-        tile.onclick = function (e) {
-            tile.classList.add("hit");
-            const hitNum = parseInt(e.target.getAttribute("data-key"));
-            console.log(hitNum);
-            totalHits.push(hitNum);
-            checkHits();
-            checkShipDestroyed();
-        };
-        gameContainer.appendChild(tile);
-    }
-    gameTile.remove();
+    const player1gameTile = document.querySelector("#player1GameTile");
+    const player2gameTile = document.querySelector("#player2GameTile");
+    const playerTiles = [player1gameTile, player2gameTile ]
+    const gameContainer1 = document.querySelector(".gameContainer1");
+    const gameContainer2 = document.querySelector(".gameContainer2");
+    playerTiles.forEach(playerTile => {
+        for (let i = 0; i < 100; i++) {
+            const tile = playerTile.cloneNode();
+            tile.setAttribute("data-key", i + 1);
+            tile.onclick = function (e) {
+                tile.classList.add("hit");
+                const hitNum = parseInt(e.target.getAttribute("data-key"));
+                console.log(hitNum);
+                totalHits.push(hitNum);
+                checkHits();
+                checkShipDestroyed();
+            };
+            if(playerTile.id == "player1GameTile"){
+                gameContainer1.appendChild(tile)
+            } else if(playerTile.id == "player2GameTile"){
+                gameContainer2.appendChild(tile)
+            }
+        }
+        player1gameTile.remove();
+        player2gameTile.remove();
+    })
+        //})
+        //const tile = gameTile.cloneNode();
+        //tile.setAttribute("data-key", i + 1);
+        //tile.onclick = function (e) {
+        //    tile.classList.add("hit");
+         //   const hitNum = parseInt(e.target.getAttribute("data-key"));
+        //    console.log(hitNum);
+        //    totalHits.push(hitNum);
+        //    checkHits();
+        //    checkShipDestroyed();
+       // };
+       // gameContainer.appendChild(tile);
+    
+    //gameTile.remove();
 };
 
 const checkHits = () => {
@@ -160,15 +184,26 @@ const nameInput = (() =>{
             playerfield.value = ""
             formContainer.classList.add("moved")
             shipformContainer.classList.add("moved")
-            formHeader.textContent = "Enter the number of ships for each player:"
-            playerfield.onkeypress = function(b){generateShips(b, player1, player2)}
+            const playbutton = document.querySelector("#playButton")
+            playbutton.onclick = function(b){generateShips(b, player1, player2)}
+            //formHeader.textContent = "Enter the number of ships for each player:"
+            //playerfield.onkeypress = function(b){generateShips(b, player1, player2)}
         }
     }
 
-
-
     const generateShips = (b, player1, player2) => {
-        if (b.keyCode ==13){
+        shipformContainer.classList.add("slideDown")
+        const cruisersNum = document.querySelector("#portraitNum").value
+        const destroyersNum = document.querySelector("#landscapeNum").value
+        const maxLength = document.querySelector("#maxLength").value
+        const minLength = document.querySelector("#minLength").value
+        console.log(cruisersNum)
+
+        const generateCruisers = (minLength, maxLength) =>{
+            for (let i = 0; i < cruisersNum; i++){
+                const ship = ship(3, "portrait", "player1")
+                allShips.push(ship)
+            }
         }
     }
 })()
