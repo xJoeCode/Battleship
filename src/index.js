@@ -205,16 +205,34 @@ const nameInput = (() =>{
         shipformContainer.classList.add("slideDown")
         const cruisersNum = document.querySelector("#portraitNum").value
         const destroyersNum = document.querySelector("#landscapeNum").value
-        const maxLength = document.querySelector("#maxLength").value
-        const minLength = document.querySelector("#minLength").value
-        console.log(cruisersNum)
+        let maxLength = parseInt(document.querySelector("#maxLength").value)
+        let minLength = parseInt(document.querySelector("#minLength").value)
+
+        
+        const randomShipLength = (minLength, maxLength) =>{
+            return Math.floor(Math.random()* (maxLength - minLength + 1) + minLength)
+        }
 
         const generateCruisers = (minLength, maxLength) =>{
             for (let i = 0; i < cruisersNum; i++){
-                const ship = ship(3, "portrait", "player1")
-                allShips.push(ship)
+                let randomLength = randomShipLength(minLength, maxLength)
+                const player1cruisers = ship(randomLength, "portrait", "playerOne")
+                const player2cruisers = ship(randomLength, "portrait", "playerTwo")
+                allShips.push(player1cruisers, player2cruisers)
             }
         }
+        const generateDestroyers = (minLength, maxLength) =>{
+            for ( let i =0; i < destroyersNum; i++){
+                let randomLength = randomShipLength(minLength, maxLength)
+                const player1Destroyers = ship(randomLength, "landscape", "playerOne")
+                const player2Destroyers = ship(randomLength, "landscape", "playerTwo")
+                allShips.push(player1Destroyers, player2Destroyers)
+            }
+        }
+
+        generateCruisers(minLength, maxLength)
+        generateDestroyers(minLength, maxLength)
+        console.log(allShips)
     }
 })()
 
