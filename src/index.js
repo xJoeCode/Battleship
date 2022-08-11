@@ -14,6 +14,8 @@ class player {
 //let Tim = new player("Tim")
 
 //console.log(john)
+let allPortraitPos = [];
+let allLandscapePos = [];
 
 const ship = (length, orient, player) => {
     const getLength = () => length;
@@ -28,36 +30,74 @@ const ship = (length, orient, player) => {
         if (orient === "landscape") {
             // to make sure all positions are placed correctly
 
-            const pushToArray = (initialPos) =>{
-                console.log('pushing to array')
-                for (let i = 0; i < length; i++) {
-                    position.push(player + (initialPos + i));
+            const checkPosAlreadyUsed = (Pos) =>{
+                for (let i = 0; i < length; i++){
+                    let tempPos = Pos + i
+                    if(allLandscapePos.includes(tempPos)){
+                        return true
+                    } 
                 }
+               // console.log(tempArray)
+               // console.log(allLandscapePos)
+               // if(allLandscapePos.some(num => tempArray.includes(num))){
+               //     return true
+                //}
             }
-            const checkPos = (initialPos) => {
+
+            const pushToArrayLandscape = (initialPos) =>{
+                if (!checkPosAlreadyUsed(initialPos)){
+                    console.log('pushing to array')
+                    for (let i = 0; i < length; i++) {
+                        let finalPos = initialPos + i
+                        position.push(player + (finalPos));
+                        allLandscapePos.push(finalPos)
+                        }  
+                }else {
+                    console.log("landscape Pos failed" + initialPos)
+                    shipPos(player)
+                }                     
+            }
+            const checkPosLandscape = (initialPos) => {
                 for (let i = 0; i < length; i++) {
                     let testPos = initialPos + i;
                     if (testPos % 10 == 0) {
                         console.log(testPos)
-                            initialPos = initialPos + (i +1)
+                            initialPos = initialPos + (i + 1)
                             console.log("checking pos 1")
-                            pushToArray(initialPos)
+                            pushToArrayLandscape(initialPos)
                             return true
                         } 
                     }
                 };
-            if (!checkPos(initialPos) ){
+            if (!checkPosLandscape(initialPos) ){
                 console.log('checking pos 2')
-                pushToArray(initialPos)
+                pushToArrayLandscape(initialPos)
             }
         } else if (orient === "portrait") {
             // to make sure all positions are in the gameboard
-            const lastPos = initialPos + length * 10;
-            if (lastPos > 100) {
-                initialPos = initialPos - length * 10;
+
+            const checkPosPortrait = (initialPos) =>{ 
+                for (let i = 0; i < length; i++){
+                    let tempPos = initialPos + (i * 10)
+                    if (tempPos > 100){
+                        initialPos = initialPos - ((length - i) * 10)
+                        pushtoArrayPortrait(initialPos)
+                        console.log(initialPos +'checking pos 3')
+                        return true
+                    }
+                }
             }
-            for (let i = 0; i < length; i++) {
-                position.push(player + (initialPos + i * 10));
+
+            const pushtoArrayPortrait = (initialPos) =>{
+                for (let i = 0; i < length; i++) {
+                    position.push(player + (initialPos + i * 10));
+                    allPortraitPos.push(initialPos + i * 10)
+                }
+            }
+            
+            if (!checkPosPortrait(initialPos)){
+                console.log('checking pos 4')
+                pushtoArrayPortrait(initialPos)
             }
         }
     };
@@ -240,6 +280,8 @@ const nameInput = (() => {
 
         generateCruisers(minLength, maxLength);
         generateDestroyers(minLength, maxLength);
-        console.log(allShips);
+        console.log(allLandscapePos);
+        console.log(allPortraitPos);
+
     };
 })();
