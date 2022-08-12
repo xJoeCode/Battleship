@@ -13,102 +13,100 @@ class player {
 //let john = new player("john")
 //let Tim = new player("Tim")
 
-//console.log(john)
 let allPortraitPos = [];
 let allLandscapePos = [];
 
-const ship = (length, orient, player) => {
+const ship = (length, orient, player , gameBoardSize) => {
     const getLength = () => length;
     const getPlayer = () => player;
     let position = [];
     let hits = [];
 
     const shipPos = (player) => {
-        let initialPos = Math.floor(Math.random() * 100 + 1);
-        console.log(initialPos, length, player)
+        let initialPos = Math.floor(Math.random() * gameBoardSize + 1);
+        let gameBoardLength = Math.sqrt(gameBoardSize)
+        console.log(initialPos, length, player);
 
         if (orient === "landscape") {
             // to make sure all positions are placed correctly
 
-            const checkNoDuplicateLandscapePos = (Pos) =>{
-                for (let i = 0; i < length; i++){
-                    let tempPos = Pos + i
-                    if(allLandscapePos.includes(tempPos)){
-                        return true
-                    } 
+            const checkNoDuplicateLandscapePos = (Pos) => {
+                for (let i = 0; i < length; i++) {
+                    let tempPos = Pos + i;
+                    if (allLandscapePos.includes(tempPos)) {
+                        return true;
+                    }
                 }
-            }
+            };
 
             const pushToArrayLandscape = (initialPos) => {
-                if (!checkNoDuplicateLandscapePos(initialPos)){
-                    console.log('pushing to array')
+                if (!checkNoDuplicateLandscapePos(initialPos)) {
+                    console.log("pushing to array");
                     for (let i = 0; i < length; i++) {
-                        let finalPos = initialPos + i
-                        position.push(player + (finalPos));
-                        allLandscapePos.push(finalPos)
-                        }  
+                        let finalPos = initialPos + i;
+                        position.push(player + finalPos);
+                        allLandscapePos.push(finalPos);
+                    }
                 } else {
-                    console.log("landscape Pos already used" + initialPos)
-                    shipPos(player)
-                }                     
-            }
+                    console.log("landscape Pos already used" + initialPos);
+                    shipPos(player);
+                }
+            };
 
             const checkPosLandscape = (initialPos) => {
                 for (let i = 0; i < length; i++) {
                     let testPos = initialPos + i;
-                    if (testPos % 10 == 0) {
-                        console.log(testPos)
-                            initialPos = initialPos + (i + 1)
-                            console.log("checking pos 1")
-                            pushToArrayLandscape(initialPos)
-                            return true
-                        } 
+                    if (testPos % gameBoardLength == 0) {
+                        console.log(testPos);
+                        initialPos = initialPos + (i + 1);
+                        console.log("checking pos 1");
+                        pushToArrayLandscape(initialPos);
+                        return true;
                     }
-                };
-            if (!checkPosLandscape(initialPos) ){
-                console.log('checking pos 2')
-                pushToArrayLandscape(initialPos)
+                }
+            };
+            if (!checkPosLandscape(initialPos)) {
+                console.log("checking pos 2");
+                pushToArrayLandscape(initialPos);
             }
         } else if (orient === "portrait") {
 
-            const checkNoDuplicatePotraitPos = (Pos) =>{
+            const checkNoDuplicatePotraitPos = (Pos) => {
                 for (let i = 0; i < length; i++) {
-                    let tempPos = (initialPos + i * 10);
-                    if(allPortraitPos.includes(tempPos)){
-                        return true
+                    let tempPos = initialPos + i * gameBoardLength;
+                    if (allPortraitPos.includes(tempPos)) {
+                        return true;
                     }
                 }
-            }
+            };
 
-            const checkPosPortrait = (initialPos) =>{ 
-                for (let i = 0; i < length; i++){
-                    let tempPos = initialPos + (i * 10)
-                    if (tempPos > 100){
-                        initialPos = initialPos - ((length - i) * 10)
-                        pushtoArrayPortrait(initialPos)
-                        console.log(initialPos +'checking pos 3')
-                        return true
+            const checkPosPortrait = (initialPos) => {
+                for (let i = 0; i < length; i++) {
+                    let tempPos = initialPos + i * gameBoardLength;
+                    if (tempPos > gameBoardSize) {
+                        initialPos = initialPos - (length - i) * gameBoardLength;
+                        pushtoArrayPortrait(initialPos);
+                        console.log(initialPos + "checking pos 3");
+                        return true;
                     }
                 }
-            }
+            };
 
-            const pushtoArrayPortrait = (initialPos) =>{
-                if (!checkNoDuplicatePotraitPos(initialPos)){
+            const pushtoArrayPortrait = (initialPos) => {
+                if (!checkNoDuplicatePotraitPos(initialPos)) {
                     for (let i = 0; i < length; i++) {
-                        position.push(player + (initialPos + i * 10));
-                        allPortraitPos.push(initialPos + i * 10)
+                        position.push(player + (initialPos + i * gameBoardLength));
+                        allPortraitPos.push(initialPos + i * gameBoardLength);
                     }
                 } else {
-                    console.log("Portrait Pos already used " + initialPos)
-                    shipPos(player)
-
+                    console.log("Portrait Pos already used " + initialPos);
+                    shipPos(player);
                 }
+            };
 
-            }
-            
-            if (!checkPosPortrait(initialPos)){
-                console.log('checking pos 4')
-                pushtoArrayPortrait(initialPos)
+            if (!checkPosPortrait(initialPos)) {
+                console.log("checking pos 4");
+                pushtoArrayPortrait(initialPos);
             }
         }
     };
@@ -116,24 +114,30 @@ const ship = (length, orient, player) => {
     return { getLength, position, hits, player };
 };
 
-const albama = ship(8, "landscape", "playerOne");
-const chicken = ship(6, "portrait", "playerTwo");
-//let allShipPos = [];
-//allShipPos.push(...chicken.position);
-//allShipPos.push(...albama.position);
-let allShips = [albama, chicken];
-console.log(allShips);
+//const albama = ship(8, "landscape", "playerOne");
+//const chicken = ship(6, "portrait", "playerTwo");
+
+let allShips = [];
+//console.log(allShips);
 
 let totalHits = [];
 
-const generateboard = () => {
+const generateboard = (gameBoardSize) => {
     const player1gameTile = document.querySelector("#player1GameTile");
     const player2gameTile = document.querySelector("#player2GameTile");
     const gameContainer1 = document.querySelector(".gameContainer1");
     const gameContainer2 = document.querySelector(".gameContainer2");
+
+    if (gameBoardSize === 400) {
+        gameContainer1.style.gridTemplateColumns = "repeat(20, 1fr)"
+        gameContainer1.style.gridTemplateRows = "repeat(20, 1fr)"
+        gameContainer2.style.gridTemplateColumns = "repeat(20, 1fr)"
+        gameContainer2.style.gridTemplateRows = "repeat(20, 1fr)"
+    } 
+
     const playerTiles = [player1gameTile, player2gameTile];
     playerTiles.forEach((playerTile) => {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < gameBoardSize; i++) {
             const tile = playerTile.cloneNode();
             tile.setAttribute("data-key", i + 1);
             tile.onclick = function (e) {
@@ -222,8 +226,6 @@ const destroyShip = (ship) => {
     });
 };
 
-generateboard();
-
 const nameInput = (() => {
     const playerfield = document.querySelector("#text");
     const formContainer = document.querySelector(".formContainer");
@@ -250,18 +252,41 @@ const nameInput = (() => {
             a.preventDefault();
             let player2 = new player(`${playerfield.value}`);
             playerfield.value = "";
+            formHeader.textContent = "Enter the size of the Game Board:";
+            playerfield.placeholder = "medium or small";
+            playerfield.onkeypress = function (b) {
+                getBoardSize(b, player1, player2);
+            };
+        }
+    };
+    const getBoardSize = (b, player1, player2) => {
+        if (b.keyCode == 13) {
+            b.preventDefault();
+            let gameBoardSize = document.querySelector("#text").value;
+
+            if (gameBoardSize === "small"){
+                gameBoardSize = 100
+            } else if(gameBoardSize === "medium"){
+                gameBoardSize = 400
+            }
+
             formContainer.classList.add("moved");
             shipformContainer.classList.add("moved");
+            if (gameBoardSize === 100) {
+                document.querySelector("#portraitNum").max = "5";
+                document.querySelector("#landscapeNum").max = "5";
+                document.querySelector("#minLength").max = "5";
+                document.querySelector("#minLength").max = "9";
+            }
             const playbutton = document.querySelector("#playButton");
             playbutton.onclick = function (b) {
-                generateShips(b, player1, player2);
+                generateboard(gameBoardSize);
+                generateShips(b, player1, player2, gameBoardSize);
             };
-            //formHeader.textContent = "Enter the number of ships for each player:"
-            //playerfield.onkeypress = function(b){generateShips(b, player1, player2)}
         }
     };
 
-    const generateShips = (b, player1, player2) => {
+    const generateShips = (b, player1, player2, gameBoardSize) => {
         shipformContainer.classList.add("slideDown");
         const cruisersNum = document.querySelector("#portraitNum").value;
         const destroyersNum = document.querySelector("#landscapeNum").value;
@@ -275,16 +300,16 @@ const nameInput = (() => {
         const generateCruisers = (minLength, maxLength) => {
             for (let i = 0; i < cruisersNum; i++) {
                 let randomLength = randomShipLength(minLength, maxLength);
-                const player1cruisers = ship(randomLength, "portrait", "playerOne");
-                const player2cruisers = ship(randomLength, "portrait", "playerTwo");
+                const player1cruisers = ship(randomLength, "portrait", "playerOne", gameBoardSize);
+                const player2cruisers = ship(randomLength, "portrait", "playerTwo", gameBoardSize);
                 allShips.push(player1cruisers, player2cruisers);
             }
         };
         const generateDestroyers = (minLength, maxLength) => {
             for (let i = 0; i < destroyersNum; i++) {
                 let randomLength = randomShipLength(minLength, maxLength);
-                const player1Destroyers = ship(randomLength, "landscape", "playerOne");
-                const player2Destroyers = ship(randomLength, "landscape", "playerTwo");
+                const player1Destroyers = ship(randomLength, "landscape", "playerOne", gameBoardSize);
+                const player2Destroyers = ship(randomLength, "landscape", "playerTwo", gameBoardSize);
                 allShips.push(player1Destroyers, player2Destroyers);
             }
         };
@@ -293,6 +318,5 @@ const nameInput = (() => {
         generateDestroyers(minLength, maxLength);
         console.log(allLandscapePos);
         console.log(allPortraitPos);
-
     };
 })();
