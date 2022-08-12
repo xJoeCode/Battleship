@@ -30,33 +30,29 @@ const ship = (length, orient, player) => {
         if (orient === "landscape") {
             // to make sure all positions are placed correctly
 
-            const checkPosAlreadyUsed = (Pos) =>{
+            const checkNoDuplicateLandscapePos = (Pos) =>{
                 for (let i = 0; i < length; i++){
                     let tempPos = Pos + i
                     if(allLandscapePos.includes(tempPos)){
                         return true
                     } 
                 }
-               // console.log(tempArray)
-               // console.log(allLandscapePos)
-               // if(allLandscapePos.some(num => tempArray.includes(num))){
-               //     return true
-                //}
             }
 
-            const pushToArrayLandscape = (initialPos) =>{
-                if (!checkPosAlreadyUsed(initialPos)){
+            const pushToArrayLandscape = (initialPos) => {
+                if (!checkNoDuplicateLandscapePos(initialPos)){
                     console.log('pushing to array')
                     for (let i = 0; i < length; i++) {
                         let finalPos = initialPos + i
                         position.push(player + (finalPos));
                         allLandscapePos.push(finalPos)
                         }  
-                }else {
-                    console.log("landscape Pos failed" + initialPos)
+                } else {
+                    console.log("landscape Pos already used" + initialPos)
                     shipPos(player)
                 }                     
             }
+
             const checkPosLandscape = (initialPos) => {
                 for (let i = 0; i < length; i++) {
                     let testPos = initialPos + i;
@@ -74,7 +70,15 @@ const ship = (length, orient, player) => {
                 pushToArrayLandscape(initialPos)
             }
         } else if (orient === "portrait") {
-            // to make sure all positions are in the gameboard
+
+            const checkNoDuplicatePotraitPos = (Pos) =>{
+                for (let i = 0; i < length; i++) {
+                    let tempPos = (initialPos + i * 10);
+                    if(allPortraitPos.includes(tempPos)){
+                        return true
+                    }
+                }
+            }
 
             const checkPosPortrait = (initialPos) =>{ 
                 for (let i = 0; i < length; i++){
@@ -89,10 +93,17 @@ const ship = (length, orient, player) => {
             }
 
             const pushtoArrayPortrait = (initialPos) =>{
-                for (let i = 0; i < length; i++) {
-                    position.push(player + (initialPos + i * 10));
-                    allPortraitPos.push(initialPos + i * 10)
+                if (!checkNoDuplicatePotraitPos(initialPos)){
+                    for (let i = 0; i < length; i++) {
+                        position.push(player + (initialPos + i * 10));
+                        allPortraitPos.push(initialPos + i * 10)
+                    }
+                } else {
+                    console.log("Portrait Pos already used " + initialPos)
+                    shipPos(player)
+
                 }
+
             }
             
             if (!checkPosPortrait(initialPos)){
