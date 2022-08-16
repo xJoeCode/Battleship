@@ -4,7 +4,7 @@
 
 #player1GameTile, #player2GameTile{
     background-color: #8C6636;
-    width: 50px;
+    width: 40px;
     height: auto;
     aspect-ratio: 1/1;
     margin: 0;
@@ -39,7 +39,7 @@
 }
 
 .hitImage{
-    width: 50px;
+    width: 40px;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -94,7 +94,7 @@
 }
 
 input[type="text"], input[type="number"]{
-    width: 50%;
+    width: 70%;
     height: 3rem;
     background-color:  transparent;
     border: none;

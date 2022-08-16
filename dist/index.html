@@ -14,22 +14,22 @@
         <div class="formContainer">
             <form autocomplete="off"  id="form">
                 <h1 id="formHeader"> Welcome Player 1, Enter your name:</h1>
-                <input type="text" id="text">
+                <input type="text" id="text"  required>
             </form>
         </div>
         <div class="shipFormContainer">
             <form id="shipForm">
-                <label for="portraitNum">Enter the number of portrait orient Cruisers for each player (1-10)</label>
-                <input type="number" id="portraitNum" min="1" max="10">
+                <label for="portraitNum">Enter the number of portrait orient Cruisers for each player </label>
+                <input type="number" id="portraitNum" min="1" max="10" onchange='reportValidity()'  required>
 
-                <label for="landscapeNum">Enter the number of landscape orient Destroyers for each player (1-10)</label>
-                <input type="number" id="landscapeNum" min="1" max="10">
+                <label for="landscapeNum">Enter the number of landscape orient Destroyers for each player </label>
+                <input type="number" id="landscapeNum" min="1" max="10" onchange='reportValidity()' required>
 
-                <label for="minLength">Enter the mimimum length for each ship (1-10)</label>
-                <input type="number" id="minLength" min="1" max="10">
+                <label for="minLength">Enter the mimimum length for each ship </label>
+                <input type="number" id="minLength" min="1" max="10" onchange='reportValidity()' required>
 
-                <label for="maxLength">Enter the maximum length for each ship (1-10)</label>
-                <input type="number" id="maxLength" min="1" max="19">
+                <label for="maxLength">Enter the maximum length for each ship </label>
+                <input type="number" id="maxLength" min="1" max="19" onchange='reportValidity()'required>
 
                 <button type="button" id="playButton"> Play</button>
             </form>

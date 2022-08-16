@@ -189,7 +189,6 @@ const checkHits = () => {
     console.log(totalHits);
 
     allShips.forEach((ship) => {
-        console.log(ship);
         let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum));
         ship.hits = [...hit];
         hit.forEach((hit) => {
@@ -226,43 +225,126 @@ const destroyShip = (ship) => {
     });
 };
 
-const nameInput = (() => {
+const generateShips = ( player1, player2, startingPlayer, gameBoardSize) => {
+    const shipformContainer = document.querySelector(".shipFormContainer");
+    shipformContainer.classList.add("slideDown");
+    const cruisersNum = document.querySelector("#portraitNum").value;
+    const destroyersNum = document.querySelector("#landscapeNum").value;
+    let maxLength = parseInt(document.querySelector("#maxLength").value);
+    let minLength = parseInt(document.querySelector("#minLength").value);
+
+    const randomShipLength = (minLength, maxLength) => {
+        return Math.floor(Math.random() * (maxLength - minLength + 1) + minLength);
+    };
+
+    const generateCruisers = (minLength, maxLength) => {
+        for (let i = 0; i < cruisersNum; i++) {
+            let randomLength = randomShipLength(minLength, maxLength);
+            const player1cruisers = ship(randomLength, "portrait", "playerOne", gameBoardSize);
+            const player2cruisers = ship(randomLength, "portrait", "playerTwo", gameBoardSize);
+            allShips.push(player1cruisers, player2cruisers);
+        }
+    };
+    const generateDestroyers = (minLength, maxLength) => {
+        for (let i = 0; i < destroyersNum; i++) {
+            let randomLength = randomShipLength(minLength, maxLength);
+            const player1Destroyers = ship(randomLength, "landscape", "playerOne", gameBoardSize);
+            const player2Destroyers = ship(randomLength, "landscape", "playerTwo", gameBoardSize);
+            allShips.push(player1Destroyers, player2Destroyers);
+        }
+    };
+
+    generateCruisers(minLength, maxLength);
+    generateDestroyers(minLength, maxLength);
+    console.log(allLandscapePos);
+    console.log(allPortraitPos);
+};
+
+const getAllInputs = (() => {
     const playerfield = document.querySelector("#text");
     const formContainer = document.querySelector(".formContainer");
     const shipformContainer = document.querySelector(".shipFormContainer");
-    playerfield.onkeypress = function getplayersname(e) {
+    const formHeader = document.querySelector("#formHeader");
+    playerfield.onkeypress = function getplayer1name(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
-            getplayer1Name(e);
-            //playerfield.removeEventListener("keypress", getplayersname())
+            //playerfield.setCustomValidity("Please enter a valid name")
+            //playerfield.reportValidity()
+            if (playerfield.checkValidity()){
+                playerfield.setCustomValidity("")
+                let player1 = new player(`${playerfield.value}`)
+                getPlayer2Name(player1);
+                playerfield.value = ""; 
+            } else{
+                e.preventDefault();
+                playerfield.setCustomValidity("Please enter a valid name")
+                playerfield.reportValidity()
+            }
+
         }
     };
-    const getplayer1Name = (e) => {
-        console.log(playerfield.value);
-        let player1 = new player(`${playerfield.value}`);
-        playerfield.value = "";
-        const formHeader = document.querySelector("#formHeader");
+    const getPlayer2Name = (player1) => {
+        //console.log(playerfield.value);
         formHeader.textContent = "Welcome Player 2, Enter your name:";
         playerfield.onkeypress = function (a) {
-            getplayer2name(a, player1);
+            if(a.keyCode ==13){
+                a.preventDefault()
+                playerfield.reportValidity()
+                if (playerfield.checkValidity()){
+                    let player2 = new player(`${playerfield.value}`);
+                    getStartingPlayer(player1, player2);
+                    playerfield.value = "";
+                }
+            }
         };
     };
-    const getplayer2name = (a, player1) => {
-        if (a.keyCode == 13) {
-            a.preventDefault();
-            let player2 = new player(`${playerfield.value}`);
-            playerfield.value = "";
+    const getStartingPlayer = (player1, player2) =>{
+        formHeader.textContent = "Enter Starting Player";
+        playerfield.placeholder = "player1 or player2"
+        //playerfield.value = "player1"
+        playerfield.onkeypress = function (i){
+            if (i.keyCode == 13 && (playerfield.value.toLowerCase() == "player1"|| playerfield.value.toLowerCase() == "player2")){
+                i.preventDefault()
+                let startingPlayer = playerfield.value
+                getBoardSizeValues( player1, player2, startingPlayer)
+                playerfield.value = "";
+            } else if(i.keyCode == 13){
+                i.preventDefault()
+                playerfield.setCustomValidity("Enter player1 or player2")
+                playerfield.reportValidity()
+            }
+        }
+    }
+
+    const getBoardSizeValues = (player1, player2, startingPlayer) => {
+            
             formHeader.textContent = "Enter the size of the Game Board:";
             playerfield.placeholder = "medium or small";
             playerfield.onkeypress = function (b) {
-                getBoardSize(b, player1, player2);
-            };
-        }
-    };
-    const getBoardSize = (b, player1, player2) => {
-        if (b.keyCode == 13) {
-            b.preventDefault();
-            let gameBoardSize = document.querySelector("#text").value;
+
+            if (b.keyCode == 13 && (playerfield.value.toLowerCase() == 'medium' || playerfield.value.toLowerCase() == "small")){
+                b.preventDefault()
+                console.log("getting ship values")
+                playerfield.setCustomValidity("")
+                let gameBoardSize = document.querySelector("#text").value;
+                getShipValues(player1, player2, startingPlayer, gameBoardSize);
+            } else if (b.keyCode == 13) {
+                playerfield.setCustomValidity("Enter medium or small for board size")
+                playerfield.reportValidity()
+            }
+
+            }
+            
+            
+        };
+        
+    
+    const getShipValues = (player1, player2, startingPlayer, gameBoardSize) => {
+            let portraitInput = document.querySelector("#portraitNum")
+            let landscapeInput = document.querySelector("#landscapeNum")
+            let minLength = document.querySelector("#minLength")
+            let maxLength = document.querySelector("#maxLength")
+            let form = document.querySelector("#shipForm")
 
             if (gameBoardSize === "small"){
                 gameBoardSize = 100
@@ -273,50 +355,20 @@ const nameInput = (() => {
             formContainer.classList.add("moved");
             shipformContainer.classList.add("moved");
             if (gameBoardSize === 100) {
-                document.querySelector("#portraitNum").max = "5";
-                document.querySelector("#landscapeNum").max = "5";
-                document.querySelector("#minLength").max = "5";
-                document.querySelector("#minLength").max = "9";
+                portraitInput.max = "5";
+                landscapeInput.max = "5";
+                minLength.max = "5";
+                maxLength.max = "9";
             }
             const playbutton = document.querySelector("#playButton");
             playbutton.onclick = function (b) {
-                generateboard(gameBoardSize);
-                generateShips(b, player1, player2, gameBoardSize);
+                console.log(form)
+                form.reportValidity()
+                if(form.checkValidity()){
+                    generateboard(gameBoardSize);
+                    generateShips( player1, player2, startingPlayer, gameBoardSize);
+                }
             };
         }
-    };
-
-    const generateShips = (b, player1, player2, gameBoardSize) => {
-        shipformContainer.classList.add("slideDown");
-        const cruisersNum = document.querySelector("#portraitNum").value;
-        const destroyersNum = document.querySelector("#landscapeNum").value;
-        let maxLength = parseInt(document.querySelector("#maxLength").value);
-        let minLength = parseInt(document.querySelector("#minLength").value);
-
-        const randomShipLength = (minLength, maxLength) => {
-            return Math.floor(Math.random() * (maxLength - minLength + 1) + minLength);
-        };
-
-        const generateCruisers = (minLength, maxLength) => {
-            for (let i = 0; i < cruisersNum; i++) {
-                let randomLength = randomShipLength(minLength, maxLength);
-                const player1cruisers = ship(randomLength, "portrait", "playerOne", gameBoardSize);
-                const player2cruisers = ship(randomLength, "portrait", "playerTwo", gameBoardSize);
-                allShips.push(player1cruisers, player2cruisers);
-            }
-        };
-        const generateDestroyers = (minLength, maxLength) => {
-            for (let i = 0; i < destroyersNum; i++) {
-                let randomLength = randomShipLength(minLength, maxLength);
-                const player1Destroyers = ship(randomLength, "landscape", "playerOne", gameBoardSize);
-                const player2Destroyers = ship(randomLength, "landscape", "playerTwo", gameBoardSize);
-                allShips.push(player1Destroyers, player2Destroyers);
-            }
-        };
-
-        generateCruisers(minLength, maxLength);
-        generateDestroyers(minLength, maxLength);
-        console.log(allLandscapePos);
-        console.log(allPortraitPos);
-    };
+        
 })();
