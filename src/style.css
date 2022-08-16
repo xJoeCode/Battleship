@@ -4,9 +4,8 @@
 
 #player1GameTile, #player2GameTile{
     background-color: #8C6636;
-    width: 40px;
-    height: auto;
-    aspect-ratio: 1/1;
+    width: 100%;
+    height: 100%;
     margin: 0;
     border: 1px solid black;
     cursor: pointer;
@@ -29,9 +28,9 @@
 
 .gameContainer1, .gameContainer2{
     margin: 1rem;
-    width: auto;
-    height: auto;
-    justify-items: center;
+    width: 60rem;
+    height: 60rem;
+    place-items: center;
     overflow: hidden;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -93,6 +92,13 @@
     align-items: center;
 }
 
+#playerTurn{
+    font-family: var(--main-font);
+    font-size: 4rem;
+    margin-top: 50px;
+    grid-column: 1/ -1;
+}
+
 input[type="text"], input[type="number"]{
     width: 70%;
     height: 3rem;
@@ -131,9 +137,10 @@ label{
 
 body{
     background-color: #264559;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
     height: 100vh;
     width: 100%;
 }

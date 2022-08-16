@@ -10,8 +10,6 @@ class player {
     turn = 0;
 }
 
-//let john = new player("john")
-//let Tim = new player("Tim")
 
 let allPortraitPos = [];
 let allLandscapePos = [];
@@ -122,11 +120,12 @@ let allShips = [];
 
 let totalHits = [];
 
-const generateboard = (gameBoardSize) => {
+const generateboard = (gameBoardSize,player1,player2) => {
     const player1gameTile = document.querySelector("#player1GameTile");
     const player2gameTile = document.querySelector("#player2GameTile");
     const gameContainer1 = document.querySelector(".gameContainer1");
     const gameContainer2 = document.querySelector(".gameContainer2");
+    const playerturnHeader = document.querySelector("#playerTurn")
 
     if (gameBoardSize === 400) {
         gameContainer1.style.gridTemplateColumns = "repeat(20, 1fr)"
@@ -140,14 +139,53 @@ const generateboard = (gameBoardSize) => {
         for (let i = 0; i < gameBoardSize; i++) {
             const tile = playerTile.cloneNode();
             tile.setAttribute("data-key", i + 1);
-            tile.onclick = function (e) {
-                tile.classList.add("hit");
-                const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
-                console.log(hitNum);
-                totalHits.push(hitNum);
-                checkHits();
-                checkShipDestroyed();
-            };
+            //tile.setAttribute("data-id", player1)
+
+            const attackShip = (e,player1,player2) =>{
+                const tile = e.target.getAttribute("data-id")
+                console.log(tile)
+                if (tile == "playerOne" && player1.turn == 1){
+                    e.target.classList.add("hit");
+                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
+                    console.log(hitNum);
+                    totalHits.push(hitNum);
+                    checkHits();
+                    checkShipDestroyed();
+                    return true
+                } else if(tile == "playerTwo" && player2.turn == 1){
+                    e.target.classList.add("hit");
+                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
+                    console.log(hitNum);
+                    totalHits.push(hitNum);
+                    checkHits();
+                    checkShipDestroyed();
+                    return true
+                }
+
+            } 
+
+            console.log(player1)
+
+            tile.onclick = function (e){
+            if (player1.turn == 1){
+                //playerturnHeader.textContent = `${player1.name}'s Turn`
+                if(attackShip(e,player1, player2)){
+                    playerturnHeader.textContent = `${player2.name}'s Turn`
+                    player1.turn--
+                    player2.turn++
+                }
+                
+                
+            } else if(player2.turn == 1){
+                //playerturnHeader.textContent = `${player2.name}'s Turn`
+                if(attackShip(e,player1, player2)){
+                    playerturnHeader.textContent = `${player1.name}'s Turn`
+                    player2.turn--
+                    player1.turn++
+                    }
+                } 
+            }
+
             if (playerTile.id == "player1GameTile") {
                 gameContainer1.appendChild(tile);
             } else if (playerTile.id == "player2GameTile") {
@@ -157,20 +195,6 @@ const generateboard = (gameBoardSize) => {
         player1gameTile.remove();
         player2gameTile.remove();
     });
-    //})
-    //const tile = gameTile.cloneNode();
-    //tile.setAttribute("data-key", i + 1);
-    //tile.onclick = function (e) {
-    //    tile.classList.add("hit");
-    //   const hitNum = parseInt(e.target.getAttribute("data-key"));
-    //    console.log(hitNum);
-    //    totalHits.push(hitNum);
-    //    checkHits();
-    //    checkShipDestroyed();
-    // };
-    // gameContainer.appendChild(tile);
-
-    //gameTile.remove();
 };
 
 const checkHits = () => {
@@ -256,9 +280,22 @@ const generateShips = ( player1, player2, startingPlayer, gameBoardSize) => {
 
     generateCruisers(minLength, maxLength);
     generateDestroyers(minLength, maxLength);
+    generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize);
     console.log(allLandscapePos);
     console.log(allPortraitPos);
 };
+
+const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize) => {
+    const playerturnHeader = document.querySelector("#playerTurn")
+    if (startingPlayer == "player1"){
+        player1.turn++
+        playerturnHeader.textContent = `${player1.name}'s Turn`
+    } else if (startingPlayer == "player2"){
+        player2.turn++
+        playerturnHeader.textContent = `${player2.name}'s Turn`
+    }
+    generateboard(gameBoardSize,player1,player2)
+}
 
 const getAllInputs = (() => {
     const playerfield = document.querySelector("#text");
@@ -365,7 +402,6 @@ const getAllInputs = (() => {
                 console.log(form)
                 form.reportValidity()
                 if(form.checkValidity()){
-                    generateboard(gameBoardSize);
                     generateShips( player1, player2, startingPlayer, gameBoardSize);
                 }
             };
