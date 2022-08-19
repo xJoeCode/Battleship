@@ -10,11 +10,10 @@ class player {
     turn = 0;
 }
 
-
 let allPortraitPos = [];
 let allLandscapePos = [];
 
-const ship = (length, orient, player , gameBoardSize) => {
+const ship = (length, orient, player, gameBoardSize) => {
     const getLength = () => length;
     const getPlayer = () => player;
     let position = [];
@@ -22,7 +21,7 @@ const ship = (length, orient, player , gameBoardSize) => {
 
     const shipPos = (player) => {
         let initialPos = Math.floor(Math.random() * gameBoardSize + 1);
-        let gameBoardLength = Math.sqrt(gameBoardSize)
+        let gameBoardLength = Math.sqrt(gameBoardSize);
         console.log(initialPos, length, player);
 
         if (orient === "landscape") {
@@ -68,7 +67,6 @@ const ship = (length, orient, player , gameBoardSize) => {
                 pushToArrayLandscape(initialPos);
             }
         } else if (orient === "portrait") {
-
             const checkNoDuplicatePotraitPos = (Pos) => {
                 for (let i = 0; i < length; i++) {
                     let tempPos = initialPos + i * gameBoardLength;
@@ -120,136 +118,128 @@ let allShips = [];
 
 let totalHits = [];
 
-const generateboard = (gameBoardSize,player1,player2) => {
-    const player1gameTile = document.querySelector("#player1GameTile");
-    const player2gameTile = document.querySelector("#player2GameTile");
-    const gameContainer1 = document.querySelector(".gameContainer1");
-    const gameContainer2 = document.querySelector(".gameContainer2");
-    const playerturnHeader = document.querySelector("#playerTurn")
 
-    if (gameBoardSize === 400) {
-        gameContainer1.style.gridTemplateColumns = "repeat(20, 1fr)"
-        gameContainer1.style.gridTemplateRows = "repeat(20, 1fr)"
-        gameContainer2.style.gridTemplateColumns = "repeat(20, 1fr)"
-        gameContainer2.style.gridTemplateRows = "repeat(20, 1fr)"
-    } 
 
-    const playerTiles = [player1gameTile, player2gameTile];
-    playerTiles.forEach((playerTile) => {
-        for (let i = 0; i < gameBoardSize; i++) {
-            const tile = playerTile.cloneNode();
-            tile.setAttribute("data-key", i + 1);
-            //tile.setAttribute("data-id", player1)
 
-            const attackShip = (e,player1,player2) =>{
-                const tile = e.target.getAttribute("data-id")
-                console.log(tile)
-                if (tile == "playerOne" && player1.turn == 1){
-                    e.target.classList.add("hit");
-                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
-                    console.log(hitNum);
-                    totalHits.push(hitNum);
-                    checkHits();
-                    checkShipDestroyed();
-                    return true
-                } else if(tile == "playerTwo" && player2.turn == 1){
-                    e.target.classList.add("hit");
-                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
-                    console.log(hitNum);
-                    totalHits.push(hitNum);
-                    checkHits();
-                    checkShipDestroyed();
-                    return true
-                }
-
-            } 
-
-            console.log(player1)
-
-            tile.onclick = function (e){
-            if (player1.turn == 1){
-                //playerturnHeader.textContent = `${player1.name}'s Turn`
-                if(attackShip(e,player1, player2)){
-                    playerturnHeader.textContent = `${player2.name}'s Turn`
-                    player1.turn--
-                    player2.turn++
-                }
-                
-                
-            } else if(player2.turn == 1){
-                //playerturnHeader.textContent = `${player2.name}'s Turn`
-                if(attackShip(e,player1, player2)){
-                    playerturnHeader.textContent = `${player1.name}'s Turn`
-                    player2.turn--
-                    player1.turn++
-                    }
-                } 
+const getAllInputs = (() => {
+    const playerfield = document.querySelector("#text");
+    const formContainer = document.querySelector(".formContainer");
+    const shipformContainer = document.querySelector(".shipFormContainer");
+    const formHeader = document.querySelector("#formHeader");
+    playerfield.onkeypress = function getplayer1name(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            //playerfield.setCustomValidity("Please enter a valid name")
+            //playerfield.reportValidity()
+            if (playerfield.checkValidity()) {
+                playerfield.setCustomValidity("");
+                let player1 = new player(`${playerfield.value}`);
+                getPlayer2Name(player1);
+                playerfield.value = "";
+            } else {
+                e.preventDefault();
+                playerfield.setCustomValidity("Please enter a valid name");
+                playerfield.reportValidity();
             }
-
-            if (playerTile.id == "player1GameTile") {
-                gameContainer1.appendChild(tile);
-            } else if (playerTile.id == "player2GameTile") {
-                gameContainer2.appendChild(tile);
-            }
-        }
-        player1gameTile.remove();
-        player2gameTile.remove();
-    });
-};
-
-const checkHits = () => {
-    const addHItIcon = (hit) => {
-        const dataid = hit.substr(0, 9);
-        const datakey = hit.substr(9, 12);
-        console.log(datakey);
-        const hitTile = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
-        if (!hitTile.hasChildNodes()) {
-            const hitImage = document.createElement("img");
-            hitImage.classList.add("hitImage");
-            hitImage.src = explosionIcon;
-            hitTile.appendChild(hitImage);
         }
     };
-    console.log(totalHits);
+    const getPlayer2Name = (player1) => {
+        //console.log(playerfield.value);
+        formHeader.textContent = "Welcome Player 2, Enter your name:";
+        playerfield.onkeypress = function (a) {
+            if (a.keyCode == 13) {
+                a.preventDefault();
+                playerfield.reportValidity();
+                if (playerfield.checkValidity()) {
+                    let player2 = new player(`${playerfield.value}`);
+                    playerfield.value = "";
+                    getStartingPlayer(player1, player2);
+                }
+            }
+        };
+    };
+    const getStartingPlayer = (player1, player2) => {
+        formHeader.textContent = "Enter Starting Player";
+        playerfield.placeholder = "player1 or player2";
+        playerfield.value = "player1";
+        playerfield.onkeypress = function (i) {
+            if (i.keyCode == 13 && (playerfield.value.toLowerCase() == "player1" || playerfield.value.toLowerCase() == "player2")) {
+                i.preventDefault();
+                let startingPlayer = playerfield.value;
+                playerfield.value = "";
+                getBoardSizeValues(player1, player2, startingPlayer);
+            } else if (i.keyCode == 13) {
+                i.preventDefault();
+                playerfield.setCustomValidity("Enter player1 or player2");
+                playerfield.reportValidity();
+            }
+        };
+    };
 
-    allShips.forEach((ship) => {
-        let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum));
-        ship.hits = [...hit];
-        hit.forEach((hit) => {
-            addHItIcon(hit);
-        });
-    });
-    console.log(allShips);
+    const getBoardSizeValues = (player1, player2, startingPlayer) => {
+        formHeader.textContent = "Enter the size of the Game Board:";
+        playerfield.value = "small";
+        playerfield.placeholder = "medium or small";
+        playerfield.onkeypress = function (b) {
+            if (b.keyCode == 13 && (playerfield.value.toLowerCase() == "medium" || playerfield.value.toLowerCase() == "small")) {
+                b.preventDefault();
+                console.log("getting ship values");
+                playerfield.setCustomValidity("");
+                let gameBoardSize = document.querySelector("#text").value;
+                getShipValues(player1, player2, startingPlayer, gameBoardSize);
+            } else if (b.keyCode == 13) {
+                playerfield.setCustomValidity("Enter medium or small for board size");
+                playerfield.reportValidity();
+            }
+        };
+    };
 
-    //  let hit = allShipPos.filter((position) => hits.includes(position));
-    //  hit.forEach((hit) => {
-    //      addHItIcon(hit);
-    //  });
-};
+    const getShipValues = (player1, player2, startingPlayer, gameBoardSize) => {
+        let portraitInput = document.querySelector("#portraitNum");
+        const portraitNumText = document.querySelector("#portraitLabelNum");
+        const landscapeNumText = document.querySelector("#landscapeLabelNum");
+        const minLabelNum = document.querySelector("#minLabelNum")
+        const maxLabelNum = document.querySelector("#maxLabelNum")
+        let landscapeInput = document.querySelector("#landscapeNum");
+        let minLength = document.querySelector("#minLength");
+        let maxLength = document.querySelector("#maxLength");
+        let form = document.querySelector("#shipForm");
 
-const checkShipDestroyed = () => {
-    allShips.forEach((ship) => {
-        let checkForDestroyed = ship.position.every((pos) => ship.hits.includes(pos));
-        if (checkForDestroyed) {
-            destroyShip(ship);
+        if (gameBoardSize === "small") {
+            gameBoardSize = 100;
+        } else if (gameBoardSize === "medium") {
+            gameBoardSize = 400;
         }
-        //console.log(checkForDestroyed)
-        //console.log(ship.position)
-        //console.log(ship.hits)
-    });
-};
 
-const destroyShip = (ship) => {
-    ship.position.forEach((number) => {
-        const dataid = number.substr(0, 9);
-        const datakey = number.substr(9, 12);
-        const shipPos = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
-        shipPos.firstChild.src = SinkIcon;
-        console.log(shipPos);
-    });
-};
+        formContainer.classList.add("moved");
+        shipformContainer.classList.add("moved");
+        if (gameBoardSize === 100) {
+            portraitInput.max = "5";
+            landscapeInput.max = "5";
+            minLength.max = "5";
+            maxLength.max = "9";
+            portraitNumText.textContent = "(1-5)"
+            landscapeNumText.textContent = "(1-5)"
+            minLabelNum.textContent = "(1-5)"
+            maxLabelNum.textContent = "(1-9)"
+        }
+        const playbutton = document.querySelector("#playButton");
+        playbutton.onclick = function (b) {
+            console.log(form);
+            maxLength.setCustomValidity("")
+            form.reportValidity();
+            if(maxLength.value< minLength.value){
+                maxLength.setCustomValidity("Maximum length must be more than minimum length")
+                maxLength.reportValidity()
+            }else if (maxLength.value > minLength.value && form.checkValidity()) {
+                maxLength.setCustomValidity("")
+                generateShips(player1, player2, startingPlayer, gameBoardSize);
+            }
+        };
+    };
+})();
 
-const generateShips = ( player1, player2, startingPlayer, gameBoardSize) => {
+const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
     const shipformContainer = document.querySelector(".shipFormContainer");
     shipformContainer.classList.add("slideDown");
     const cruisersNum = document.querySelector("#portraitNum").value;
@@ -280,131 +270,187 @@ const generateShips = ( player1, player2, startingPlayer, gameBoardSize) => {
 
     generateCruisers(minLength, maxLength);
     generateDestroyers(minLength, maxLength);
+    generateScoreBoard(player1, player2)
     generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize);
-    console.log(allLandscapePos);
-    console.log(allPortraitPos);
+    console.log("all landscape postions" + allLandscapePos);
+    console.log("all portrait postions" + allPortraitPos);
 };
 
-const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize) => {
-    const playerturnHeader = document.querySelector("#playerTurn")
-    if (startingPlayer == "player1"){
-        player1.turn++
-        playerturnHeader.textContent = `${player1.name}'s Turn`
-    } else if (startingPlayer == "player2"){
-        player2.turn++
-        playerturnHeader.textContent = `${player2.name}'s Turn`
+const generateScoreBoard = (player1, player2) =>{
+    
+    const player1Score = document.querySelector("#player1Score")
+    const player2Score = document.querySelector("#player2Score")
+    const playerTurnHeader = document.querySelector("#playerTurn")
+    let player1Ships = allShips.filter(ship => ship.player == "playerOne" && ship.position.length !== ship.hits.length)
+    let player2Ships = allShips.filter(ship => ship.player == "playerTwo"&& ship.position.length !== ship.hits.length)
+    if (player1Ships.length == 0){
+        playerTurnHeader.textContent = `${player2.name} Wins`
+        player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`
+        return false
+ 
+    } else if (player2Ships.length == 0){
+        playerTurnHeader.textContent = `${player1.name}Wins`
+        player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`
+        return false
+
     }
-    generateboard(gameBoardSize,player1,player2)
+    player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`
+    player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`
+    return true
 }
 
-const getAllInputs = (() => {
-    const playerfield = document.querySelector("#text");
-    const formContainer = document.querySelector(".formContainer");
-    const shipformContainer = document.querySelector(".shipFormContainer");
-    const formHeader = document.querySelector("#formHeader");
-    playerfield.onkeypress = function getplayer1name(e) {
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            //playerfield.setCustomValidity("Please enter a valid name")
-            //playerfield.reportValidity()
-            if (playerfield.checkValidity()){
-                playerfield.setCustomValidity("")
-                let player1 = new player(`${playerfield.value}`)
-                getPlayer2Name(player1);
-                playerfield.value = ""; 
-            } else{
-                e.preventDefault();
-                playerfield.setCustomValidity("Please enter a valid name")
-                playerfield.reportValidity()
-            }
+const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize) => {
+    const playerturnHeader = document.querySelector("#playerTurn");
+    const player1Header = document.querySelector("#player1Header")
+    const player2Header = document.querySelector("#player2Header")
+    
 
-        }
-    };
-    const getPlayer2Name = (player1) => {
-        //console.log(playerfield.value);
-        formHeader.textContent = "Welcome Player 2, Enter your name:";
-        playerfield.onkeypress = function (a) {
-            if(a.keyCode ==13){
-                a.preventDefault()
-                playerfield.reportValidity()
-                if (playerfield.checkValidity()){
-                    let player2 = new player(`${playerfield.value}`);
-                    getStartingPlayer(player1, player2);
-                    playerfield.value = "";
-                }
-            }
-        };
-    };
-    const getStartingPlayer = (player1, player2) =>{
-        formHeader.textContent = "Enter Starting Player";
-        playerfield.placeholder = "player1 or player2"
-        //playerfield.value = "player1"
-        playerfield.onkeypress = function (i){
-            if (i.keyCode == 13 && (playerfield.value.toLowerCase() == "player1"|| playerfield.value.toLowerCase() == "player2")){
-                i.preventDefault()
-                let startingPlayer = playerfield.value
-                getBoardSizeValues( player1, player2, startingPlayer)
-                playerfield.value = "";
-            } else if(i.keyCode == 13){
-                i.preventDefault()
-                playerfield.setCustomValidity("Enter player1 or player2")
-                playerfield.reportValidity()
-            }
-        }
+    player1Header.textContent = `${player1.name}'s board`
+    player2Header.textContent = `${player2.name}'s board`
+
+    if (startingPlayer == "player1") {
+        player1.turn++;
+        playerturnHeader.textContent = `${player1.name}'s Turn`;
+    } else if (startingPlayer == "player2") {
+        player2.turn++;
+        playerturnHeader.textContent = `${player2.name}'s Turn`;
+    }
+    generateboard(gameBoardSize, player1, player2);
+};
+const generateboard = (gameBoardSize, player1, player2) => {
+    const player1gameTile = document.querySelector("#player1GameTile");
+    const player2gameTile = document.querySelector("#player2GameTile");
+    const gameContainer1 = document.querySelector(".gameContainer1");
+    const gameContainer2 = document.querySelector(".gameContainer2");
+    const playerturnHeader = document.querySelector("#playerTurn");
+
+    if (gameBoardSize === 400) {
+        gameContainer1.style.gridTemplateColumns = "repeat(20, 1fr)";
+        gameContainer1.style.gridTemplateRows = "repeat(20, 1fr)";
+        gameContainer2.style.gridTemplateColumns = "repeat(20, 1fr)";
+        gameContainer2.style.gridTemplateRows = "repeat(20, 1fr)";
     }
 
-    const getBoardSizeValues = (player1, player2, startingPlayer) => {
-            
-            formHeader.textContent = "Enter the size of the Game Board:";
-            playerfield.placeholder = "medium or small";
-            playerfield.onkeypress = function (b) {
+    const playerTiles = [player1gameTile, player2gameTile];
+    playerTiles.forEach((playerTile) => {
+        for (let i = 0; i < gameBoardSize; i++) {
+            const tile = playerTile.cloneNode();
+            tile.setAttribute("data-key", i + 1);
+            //tile.setAttribute("data-id", player1)
 
-            if (b.keyCode == 13 && (playerfield.value.toLowerCase() == 'medium' || playerfield.value.toLowerCase() == "small")){
-                b.preventDefault()
-                console.log("getting ship values")
-                playerfield.setCustomValidity("")
-                let gameBoardSize = document.querySelector("#text").value;
-                getShipValues(player1, player2, startingPlayer, gameBoardSize);
-            } else if (b.keyCode == 13) {
-                playerfield.setCustomValidity("Enter medium or small for board size")
-                playerfield.reportValidity()
-            }
-
-            }
-            
-            
-        };
-        
-    
-    const getShipValues = (player1, player2, startingPlayer, gameBoardSize) => {
-            let portraitInput = document.querySelector("#portraitNum")
-            let landscapeInput = document.querySelector("#landscapeNum")
-            let minLength = document.querySelector("#minLength")
-            let maxLength = document.querySelector("#maxLength")
-            let form = document.querySelector("#shipForm")
-
-            if (gameBoardSize === "small"){
-                gameBoardSize = 100
-            } else if(gameBoardSize === "medium"){
-                gameBoardSize = 400
-            }
-
-            formContainer.classList.add("moved");
-            shipformContainer.classList.add("moved");
-            if (gameBoardSize === 100) {
-                portraitInput.max = "5";
-                landscapeInput.max = "5";
-                minLength.max = "5";
-                maxLength.max = "9";
-            }
-            const playbutton = document.querySelector("#playButton");
-            playbutton.onclick = function (b) {
-                console.log(form)
-                form.reportValidity()
-                if(form.checkValidity()){
-                    generateShips( player1, player2, startingPlayer, gameBoardSize);
+            const attackShip = (e, player1, player2) => {
+                const tile = e.target.getAttribute("data-id");
+                console.log(tile);
+                if (tile == "playerOne" && player1.turn == 1) {
+                    e.target.classList.add("hit");
+                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
+                    //console.log(hitNum);
+                    totalHits.push(hitNum);
+                    checkHits(player1, player2)
+                    //generateScoreBoard(player1,player2);
+                    checkShipDestroyed();
+                    if(generateScoreBoard(player1,player2)){
+                        return true
+                    } else {
+                        player1.turn = 0
+                        player2.turn = 0
+                        return false
+                    }
+                } else if (tile == "playerTwo" && player2.turn == 1) {
+                    e.target.classList.add("hit");
+                    const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
+                    //console.log(hitNum);
+                    totalHits.push(hitNum);
+                    checkHits(player1, player2);
+                    checkShipDestroyed();
+                    if(generateScoreBoard(player1,player2)){
+                        return true
+                    } else {
+                        player1.turn = 0
+                        player2.turn = 0
+                        return false
+                    }
                 }
             };
+            tile.onclick = function (e) {
+                if (player1.turn == 1) {
+                    //playerturnHeader.textContent = `${player1.name}'s Turn`
+                    if (attackShip(e, player1, player2)) {
+                        playerturnHeader.textContent = `${player2.name}'s Turn`;
+                        player1.turn--;
+                        player2.turn++;
+                    } 
+                } else if (player2.turn == 1) {
+                    //playerturnHeader.textContent = `${player2.name}'s Turn`
+                    if (attackShip(e, player1, player2)) {
+                        playerturnHeader.textContent = `${player1.name}'s Turn`;
+                        player2.turn--;
+                        player1.turn++;
+                    }
+                }
+            };
+
+            if (playerTile.id == "player1GameTile") {
+                gameContainer1.appendChild(tile);
+            } else if (playerTile.id == "player2GameTile") {
+                gameContainer2.appendChild(tile);
+            }
         }
-        
-})();
+        player1gameTile.remove();
+        player2gameTile.remove();
+    });
+};
+
+const checkHits = (player1, player2) => {
+    const addHItIcon = (hit) => {
+        const dataid = hit.substr(0, 9);
+        const datakey = hit.substr(9, 12);
+        //console.log(datakey);
+        const hitTile = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
+        if (!hitTile.hasChildNodes()) {
+            const hitImage = document.createElement("img");
+            hitImage.classList.add("hitImage");
+            hitImage.src = explosionIcon;
+            hitTile.appendChild(hitImage);
+        }
+    };
+    console.log(totalHits);
+
+    allShips.forEach((ship) => {
+        let hit = ship.position.filter((positionNum) => totalHits.includes(positionNum));
+        ship.hits = [...hit];
+        hit.forEach((hit) => {
+            addHItIcon(hit);
+        });
+    });
+    generateScoreBoard(player1, player2)
+    console.log(allShips);
+
+    //  let hit = allShipPos.filter((position) => hits.includes(position));
+    //  hit.forEach((hit) => {
+    //      addHItIcon(hit);
+    //  });
+};
+
+const checkShipDestroyed = () => {
+    allShips.forEach((ship) => {
+        let checkForDestroyed = ship.position.every((pos) => ship.hits.includes(pos));
+        if (checkForDestroyed) {
+            destroyShip(ship);
+        }
+        //console.log(checkForDestroyed)
+        //console.log(ship.position)
+        //console.log(ship.hits)
+    });
+};
+
+const destroyShip = (ship) => {
+    ship.position.forEach((number) => {
+        const dataid = number.substr(0, 9);
+        const datakey = number.substr(9, 12);
+        const shipPos = document.querySelector(`[data-key="${datakey}"][data-id="${dataid}"]`);
+        shipPos.firstChild.src = SinkIcon;
+        //console.log(shipPos);
+    });
+    //generateScoreBoard()
+};
