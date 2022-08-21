@@ -10,12 +10,14 @@ class player {
     turn = 0;
 }
 
-let allPortraitPos = [];
-let allLandscapePos = [];
+//let allPortraitPos = [];
+//let allLandscapePos = [];
+
+let allPlayer1Pos = []
+let allPlayer2Pos = []
 
 const ship = (length, orient, player, gameBoardSize) => {
     const getLength = () => length;
-    const getPlayer = () => player;
     let position = [];
     let hits = [];
 
@@ -30,9 +32,14 @@ const ship = (length, orient, player, gameBoardSize) => {
             const checkNoDuplicateLandscapePos = (Pos) => {
                 for (let i = 0; i < length; i++) {
                     let tempPos = Pos + i;
-                    if (allLandscapePos.includes(tempPos)) {
-                        return true;
+                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)){
+                        return true
+                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)){
+                        return true
                     }
+                    //if (allLandscapePos.includes(tempPos)) {
+                    //    return true;
+                    //}
                 }
             };
 
@@ -42,7 +49,12 @@ const ship = (length, orient, player, gameBoardSize) => {
                     for (let i = 0; i < length; i++) {
                         let finalPos = initialPos + i;
                         position.push(player + finalPos);
-                        allLandscapePos.push(finalPos);
+                        if (player == 'playerOne'){
+                            allPlayer1Pos.push(finalPos)
+                        } else if (player == 'playerTwo'){
+                            allPlayer2Pos.push(finalPos)
+                        }
+                        //allLandscapePos.push(finalPos);
                     }
                 } else {
                     console.log("landscape Pos already used" + initialPos);
@@ -70,9 +82,14 @@ const ship = (length, orient, player, gameBoardSize) => {
             const checkNoDuplicatePotraitPos = (Pos) => {
                 for (let i = 0; i < length; i++) {
                     let tempPos = initialPos + i * gameBoardLength;
-                    if (allPortraitPos.includes(tempPos)) {
-                        return true;
+                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)){
+                        return true
+                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)){
+                        return true
                     }
+                    //if (allPortraitPos.includes(tempPos)) {
+                    //    return true;
+                    //}
                 }
             };
 
@@ -92,7 +109,12 @@ const ship = (length, orient, player, gameBoardSize) => {
                 if (!checkNoDuplicatePotraitPos(initialPos)) {
                     for (let i = 0; i < length; i++) {
                         position.push(player + (initialPos + i * gameBoardLength));
-                        allPortraitPos.push(initialPos + i * gameBoardLength);
+                        if (player == 'playerOne'){
+                            allPlayer1Pos.push(initialPos + i * gameBoardLength)
+                        } else if (player == 'playerTwo'){
+                            allPlayer2Pos.push(initialPos + i * gameBoardLength)
+                        }
+                        //allPortraitPos.push(initialPos + i * gameBoardLength);
                     }
                 } else {
                     console.log("Portrait Pos already used " + initialPos);
@@ -117,9 +139,6 @@ let allShips = [];
 //console.log(allShips);
 
 let totalHits = [];
-
-
-
 
 const getAllInputs = (() => {
     const playerfield = document.querySelector("#text");
@@ -198,8 +217,8 @@ const getAllInputs = (() => {
         let portraitInput = document.querySelector("#portraitNum");
         const portraitNumText = document.querySelector("#portraitLabelNum");
         const landscapeNumText = document.querySelector("#landscapeLabelNum");
-        const minLabelNum = document.querySelector("#minLabelNum")
-        const maxLabelNum = document.querySelector("#maxLabelNum")
+        const minLabelNum = document.querySelector("#minLabelNum");
+        const maxLabelNum = document.querySelector("#maxLabelNum");
         let landscapeInput = document.querySelector("#landscapeNum");
         let minLength = document.querySelector("#minLength");
         let maxLength = document.querySelector("#maxLength");
@@ -218,21 +237,21 @@ const getAllInputs = (() => {
             landscapeInput.max = "5";
             minLength.max = "5";
             maxLength.max = "9";
-            portraitNumText.textContent = "(1-5)"
-            landscapeNumText.textContent = "(1-5)"
-            minLabelNum.textContent = "(1-5)"
-            maxLabelNum.textContent = "(1-9)"
+            portraitNumText.textContent = "(1-5)";
+            landscapeNumText.textContent = "(1-5)";
+            minLabelNum.textContent = "(1-5)";
+            maxLabelNum.textContent = "(1-9)";
         }
         const playbutton = document.querySelector("#playButton");
         playbutton.onclick = function (b) {
             console.log(form);
-            maxLength.setCustomValidity("")
+            maxLength.setCustomValidity("");
             form.reportValidity();
-            if(maxLength.value< minLength.value){
-                maxLength.setCustomValidity("Maximum length must be more than minimum length")
-                maxLength.reportValidity()
-            }else if (maxLength.value > minLength.value && form.checkValidity()) {
-                maxLength.setCustomValidity("")
+            if (maxLength.value < minLength.value) {
+                maxLength.setCustomValidity("Maximum length must be more than minimum length");
+                maxLength.reportValidity();
+            } else if (maxLength.value > minLength.value && form.checkValidity()) {
+                maxLength.setCustomValidity("");
                 generateShips(player1, player2, startingPlayer, gameBoardSize);
             }
         };
@@ -270,43 +289,39 @@ const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
 
     generateCruisers(minLength, maxLength);
     generateDestroyers(minLength, maxLength);
-    generateScoreBoard(player1, player2)
+    generateScoreBoard(player1, player2);
     generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize);
-    console.log("all landscape postions" + allLandscapePos);
-    console.log("all portrait postions" + allPortraitPos);
+    console.log("all player 1 postions" + allPlayer1Pos);
+    console.log("all player 2 postions" + allPlayer2Pos);
 };
 
-const generateScoreBoard = (player1, player2) =>{
-    
-    const player1Score = document.querySelector("#player1Score")
-    const player2Score = document.querySelector("#player2Score")
-    const playerTurnHeader = document.querySelector("#playerTurn")
-    let player1Ships = allShips.filter(ship => ship.player == "playerOne" && ship.position.length !== ship.hits.length)
-    let player2Ships = allShips.filter(ship => ship.player == "playerTwo"&& ship.position.length !== ship.hits.length)
-    if (player1Ships.length == 0){
-        playerTurnHeader.textContent = `${player2.name} Wins`
-        player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`
-        return false
- 
-    } else if (player2Ships.length == 0){
-        playerTurnHeader.textContent = `${player1.name}Wins`
-        player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`
-        return false
-
+const generateScoreBoard = (player1, player2) => {
+    const player1Score = document.querySelector("#player1Score");
+    const player2Score = document.querySelector("#player2Score");
+    const playerTurnHeader = document.querySelector("#playerTurn");
+    let player1Ships = allShips.filter((ship) => ship.player == "playerOne" && ship.position.length !== ship.hits.length);
+    let player2Ships = allShips.filter((ship) => ship.player == "playerTwo" && ship.position.length !== ship.hits.length);
+    if (player1Ships.length == 0) {
+        playerTurnHeader.textContent = `${player2.name} Wins`;
+        player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`;
+        return false;
+    } else if (player2Ships.length == 0) {
+        playerTurnHeader.textContent = `${player1.name}Wins`;
+        player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`;
+        return false;
     }
-    player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`
-    player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`
-    return true
-}
+    player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`;
+    player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`;
+    return true;
+};
 
 const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize) => {
     const playerturnHeader = document.querySelector("#playerTurn");
-    const player1Header = document.querySelector("#player1Header")
-    const player2Header = document.querySelector("#player2Header")
-    
+    const player1Header = document.querySelector("#player1Header");
+    const player2Header = document.querySelector("#player2Header");
 
-    player1Header.textContent = `${player1.name}'s board`
-    player2Header.textContent = `${player2.name}'s board`
+    player1Header.textContent = `${player1.name}'s board`;
+    player2Header.textContent = `${player2.name}'s board`;
 
     if (startingPlayer == "player1") {
         player1.turn++;
@@ -346,15 +361,15 @@ const generateboard = (gameBoardSize, player1, player2) => {
                     const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
                     //console.log(hitNum);
                     totalHits.push(hitNum);
-                    checkHits(player1, player2)
+                    checkHits(player1, player2);
                     //generateScoreBoard(player1,player2);
                     checkShipDestroyed();
-                    if(generateScoreBoard(player1,player2)){
-                        return true
+                    if (generateScoreBoard(player1, player2)) {
+                        return true;
                     } else {
-                        player1.turn = 0
-                        player2.turn = 0
-                        return false
+                        player1.turn = 0;
+                        player2.turn = 0;
+                        return false;
                     }
                 } else if (tile == "playerTwo" && player2.turn == 1) {
                     e.target.classList.add("hit");
@@ -363,12 +378,12 @@ const generateboard = (gameBoardSize, player1, player2) => {
                     totalHits.push(hitNum);
                     checkHits(player1, player2);
                     checkShipDestroyed();
-                    if(generateScoreBoard(player1,player2)){
-                        return true
+                    if (generateScoreBoard(player1, player2)) {
+                        return true;
                     } else {
-                        player1.turn = 0
-                        player2.turn = 0
-                        return false
+                        player1.turn = 0;
+                        player2.turn = 0;
+                        return false;
                     }
                 }
             };
@@ -379,7 +394,7 @@ const generateboard = (gameBoardSize, player1, player2) => {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
                         player2.turn++;
-                    } 
+                    }
                 } else if (player2.turn == 1) {
                     //playerturnHeader.textContent = `${player2.name}'s Turn`
                     if (attackShip(e, player1, player2)) {
@@ -423,7 +438,7 @@ const checkHits = (player1, player2) => {
             addHItIcon(hit);
         });
     });
-    generateScoreBoard(player1, player2)
+    generateScoreBoard(player1, player2);
     console.log(allShips);
 
     //  let hit = allShipPos.filter((position) => hits.includes(position));
