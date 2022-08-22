@@ -1,5 +1,6 @@
 :root{
     --main-font: 'Source Serif Pro', serif;
+    --secondary-font: 'East Sea Dokdo';
 }
 
 #player1GameTile, #player2GameTile{
@@ -29,9 +30,16 @@
     height: 60rem;
     place-items: center;
     overflow: hidden;
-    display: grid;
+    display: none;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(11, 1fr);
+
+}
+.logo{
+    font-size:  6rem;
+    font-family: var(--secondary-font);
+    margin-bottom: 50px;
+    padding: 20px;
 }
 
 #player1Header, #player2Header{
@@ -40,7 +48,7 @@
     margin: 1rem;
     padding: 1.5rem;
     font-family: var(--main-font);
-    background-color: #8C7936;
+    
 }
 
 .hitImage{
@@ -73,6 +81,7 @@
     left: 0;
     opacity: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     transform: translateY( 100vh) rotate(180deg);
@@ -102,6 +111,7 @@
     font-family: var(--main-font);
     font-size: 4rem;
     margin-top: 20px;
+    border-bottom: 1px solid black;
     
     
 }
@@ -116,7 +126,9 @@
     grid-column: 1/ -1;
     text-align: center;
     background-color: #28683B;
-    display: flex;
+    border-radius: 2rem;
+    box-shadow: 1px 1px 10px rgb(53, 53, 53);
+    display: none;
     flex-direction: column;
     align-items: center;
     padding: 10px;

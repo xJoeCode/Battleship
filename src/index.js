@@ -13,8 +13,8 @@ class player {
 //let allPortraitPos = [];
 //let allLandscapePos = [];
 
-let allPlayer1Pos = []
-let allPlayer2Pos = []
+let allPlayer1Pos = [];
+let allPlayer2Pos = [];
 
 const ship = (length, orient, player, gameBoardSize) => {
     const getLength = () => length;
@@ -32,10 +32,10 @@ const ship = (length, orient, player, gameBoardSize) => {
             const checkNoDuplicateLandscapePos = (Pos) => {
                 for (let i = 0; i < length; i++) {
                     let tempPos = Pos + i;
-                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)){
-                        return true
-                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)){
-                        return true
+                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)) {
+                        return true;
+                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)) {
+                        return true;
                     }
                     //if (allLandscapePos.includes(tempPos)) {
                     //    return true;
@@ -49,10 +49,10 @@ const ship = (length, orient, player, gameBoardSize) => {
                     for (let i = 0; i < length; i++) {
                         let finalPos = initialPos + i;
                         position.push(player + finalPos);
-                        if (player == 'playerOne'){
-                            allPlayer1Pos.push(finalPos)
-                        } else if (player == 'playerTwo'){
-                            allPlayer2Pos.push(finalPos)
+                        if (player == "playerOne") {
+                            allPlayer1Pos.push(finalPos);
+                        } else if (player == "playerTwo") {
+                            allPlayer2Pos.push(finalPos);
                         }
                         //allLandscapePos.push(finalPos);
                     }
@@ -82,10 +82,10 @@ const ship = (length, orient, player, gameBoardSize) => {
             const checkNoDuplicatePotraitPos = (Pos) => {
                 for (let i = 0; i < length; i++) {
                     let tempPos = initialPos + i * gameBoardLength;
-                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)){
-                        return true
-                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)){
-                        return true
+                    if (player == "playerOne" && allPlayer1Pos.includes(tempPos)) {
+                        return true;
+                    } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)) {
+                        return true;
                     }
                     //if (allPortraitPos.includes(tempPos)) {
                     //    return true;
@@ -109,10 +109,10 @@ const ship = (length, orient, player, gameBoardSize) => {
                 if (!checkNoDuplicatePotraitPos(initialPos)) {
                     for (let i = 0; i < length; i++) {
                         position.push(player + (initialPos + i * gameBoardLength));
-                        if (player == 'playerOne'){
-                            allPlayer1Pos.push(initialPos + i * gameBoardLength)
-                        } else if (player == 'playerTwo'){
-                            allPlayer2Pos.push(initialPos + i * gameBoardLength)
+                        if (player == "playerOne") {
+                            allPlayer1Pos.push(initialPos + i * gameBoardLength);
+                        } else if (player == "playerTwo") {
+                            allPlayer2Pos.push(initialPos + i * gameBoardLength);
                         }
                         //allPortraitPos.push(initialPos + i * gameBoardLength);
                     }
@@ -222,6 +222,8 @@ const getAllInputs = (() => {
         let landscapeInput = document.querySelector("#landscapeNum");
         let minLength = document.querySelector("#minLength");
         let maxLength = document.querySelector("#maxLength");
+        //let minLengthValue = parseInt(document.querySelector("#minLength").value)
+        //let maxLengthValue = parseInt(document.querySelector("#maxLength").value)
         let form = document.querySelector("#shipForm");
 
         if (gameBoardSize === "small") {
@@ -236,21 +238,21 @@ const getAllInputs = (() => {
             portraitInput.max = "5";
             landscapeInput.max = "5";
             minLength.max = "5";
-            maxLength.max = "9";
+            maxLength.max = "5";
             portraitNumText.textContent = "(1-5)";
             landscapeNumText.textContent = "(1-5)";
             minLabelNum.textContent = "(1-5)";
-            maxLabelNum.textContent = "(1-9)";
+            maxLabelNum.textContent = "(1-5)";
         }
         const playbutton = document.querySelector("#playButton");
         playbutton.onclick = function (b) {
-            console.log(form);
+            //console.log(parseInt(minLength.value),maxLengthValue);
             maxLength.setCustomValidity("");
             form.reportValidity();
-            if (maxLength.value < minLength.value) {
+            if (parseInt(maxLength.value) < parseInt(minLength.value)) {
                 maxLength.setCustomValidity("Maximum length must be more than minimum length");
                 maxLength.reportValidity();
-            } else if (maxLength.value > minLength.value && form.checkValidity()) {
+            } else if (parseInt(maxLength.value) > parseInt(minLength.value) && form.checkValidity()) {
                 maxLength.setCustomValidity("");
                 generateShips(player1, player2, startingPlayer, gameBoardSize);
             }
@@ -259,12 +261,16 @@ const getAllInputs = (() => {
 })();
 
 const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
-    const shipformContainer = document.querySelector(".shipFormContainer");
-    shipformContainer.classList.add("slideDown");
+    //const shipformContainer = document.querySelector(".shipFormContainer");
     const cruisersNum = document.querySelector("#portraitNum").value;
     const destroyersNum = document.querySelector("#landscapeNum").value;
     let maxLength = parseInt(document.querySelector("#maxLength").value);
     let minLength = parseInt(document.querySelector("#minLength").value);
+
+    document.querySelector(".header").style.display = "flex";
+    document.querySelector(".gameContainer1").style.display = "grid";
+    document.querySelector(".gameContainer2").style.display = "grid";
+    document.querySelector(".shipFormContainer").classList.add("slideDown");
 
     const randomShipLength = (minLength, maxLength) => {
         return Math.floor(Math.random() * (maxLength - minLength + 1) + minLength);
@@ -299,19 +305,21 @@ const generateScoreBoard = (player1, player2) => {
     const player1Score = document.querySelector("#player1Score");
     const player2Score = document.querySelector("#player2Score");
     const playerTurnHeader = document.querySelector("#playerTurn");
-    let player1Ships = allShips.filter((ship) => ship.player == "playerOne" && ship.position.length !== ship.hits.length);
-    let player2Ships = allShips.filter((ship) => ship.player == "playerTwo" && ship.position.length !== ship.hits.length);
-    if (player1Ships.length == 0) {
-        playerTurnHeader.textContent = `${player2.name} Wins`;
-        player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`;
+    let remainingPlayer1Ships = allShips.filter((ship) => ship.player == "playerOne" && ship.position.length !== ship.hits.length);
+    let remainingPlayer2Ships = allShips.filter((ship) => ship.player == "playerTwo" && ship.position.length !== ship.hits.length);
+    let destroyedPlayer1Ships = allShips.filter((ship) => ship.player == "playerOne" && ship.position.length == ship.hits.length);
+    let destroyedPlayer2Ships = allShips.filter((ship) => ship.player == "playerTwo" && ship.position.length == ship.hits.length);
+    if (remainingPlayer1Ships.length == 0) {
+        playerTurnHeader.textContent = `${player1.name} Wins`;
+        player1Score.textContent = `${player1.name} score: ${destroyedPlayer1Ships.length}  remaining ships: ${remainingPlayer1Ships.length}`;
         return false;
-    } else if (player2Ships.length == 0) {
-        playerTurnHeader.textContent = `${player1.name}Wins`;
-        player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`;
+    } else if (remainingPlayer2Ships.length == 0) {
+        playerTurnHeader.textContent = `${player2.name} Wins`;
+        player2Score.textContent = `${player2.name} score: ${destroyedPlayer2Ships.length} remaining ships: ${remainingPlayer2Ships.length}`;
         return false;
     }
-    player1Score.textContent = `${player1.name} remaining ships: ${player1Ships.length}`;
-    player2Score.textContent = `${player2.name} remaining ships: ${player2Ships.length}`;
+    player1Score.textContent = `${player1.name} score: ${destroyedPlayer1Ships.length} ships left: ${remainingPlayer1Ships.length}`;
+    player2Score.textContent = `${player2.name} score: ${destroyedPlayer2Ships.length} ships left: ${remainingPlayer2Ships.length}`;
     return true;
 };
 
@@ -326,9 +334,11 @@ const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize) =>
     if (startingPlayer == "player1") {
         player1.turn++;
         playerturnHeader.textContent = `${player1.name}'s Turn`;
+        tileBackgroundColor(player1,player2)
     } else if (startingPlayer == "player2") {
         player2.turn++;
         playerturnHeader.textContent = `${player2.name}'s Turn`;
+        tileBackgroundColor(player1,player2)
     }
     generateboard(gameBoardSize, player1, player2);
 };
@@ -341,9 +351,9 @@ const generateboard = (gameBoardSize, player1, player2) => {
 
     if (gameBoardSize === 400) {
         gameContainer1.style.gridTemplateColumns = "repeat(20, 1fr)";
-        gameContainer1.style.gridTemplateRows = "repeat(20, 1fr)";
+        gameContainer1.style.gridTemplateRows = "repeat(21, 1fr)";
         gameContainer2.style.gridTemplateColumns = "repeat(20, 1fr)";
-        gameContainer2.style.gridTemplateRows = "repeat(20, 1fr)";
+        gameContainer2.style.gridTemplateRows = "repeat(21, 1fr)";
     }
 
     const playerTiles = [player1gameTile, player2gameTile];
@@ -387,6 +397,7 @@ const generateboard = (gameBoardSize, player1, player2) => {
                     }
                 }
             };
+
             tile.onclick = function (e) {
                 if (player1.turn == 1) {
                     //playerturnHeader.textContent = `${player1.name}'s Turn`
@@ -394,6 +405,7 @@ const generateboard = (gameBoardSize, player1, player2) => {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
                         player2.turn++;
+                        tileBackgroundColor(player1,player2)
                     }
                 } else if (player2.turn == 1) {
                     //playerturnHeader.textContent = `${player2.name}'s Turn`
@@ -401,6 +413,7 @@ const generateboard = (gameBoardSize, player1, player2) => {
                         playerturnHeader.textContent = `${player1.name}'s Turn`;
                         player2.turn--;
                         player1.turn++;
+                        tileBackgroundColor(player1,player2)
                     }
                 }
             };
@@ -415,6 +428,21 @@ const generateboard = (gameBoardSize, player1, player2) => {
         player2gameTile.remove();
     });
 };
+
+const tileBackgroundColor = (player1, player2) =>{
+    const player1Container = document.querySelector(".gameContainer1")
+    const player2Container = document.querySelector(".gameContainer2")
+    if (player1.turn == 1){
+        player1Container.style.backgroundColor = "#8C4236"
+    } else if (player1.turn  == 0) {
+        player1Container.style.backgroundColor = "transparent"
+    }
+    if (player2.turn == 1){
+        player2Container.style.backgroundColor = "#8C4236"
+    } else if (player2.turn == 0) {
+        player2Container.style.backgroundColor = "transparent"
+    }   
+}
 
 const checkHits = (player1, player2) => {
     const addHItIcon = (hit) => {

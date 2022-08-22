@@ -8,16 +8,18 @@
         <title>Document</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Source+Serif+Pro&display=swap" rel="stylesheet">
     </head>
     <body>
         <div class="formContainer">
             <form autocomplete="off"  id="form">
+                <h1 class="logo" >BattleShip</h1>
                 <h1 id="formHeader"> Welcome Player 1, Enter your name:</h1>
                 <input type="text" id="text"  required>
             </form>
         </div>
         <div class="shipFormContainer">
+            <h1 class="logo" >BattleShip</h1>
             <form id="shipForm">
                 <label for="portraitNum">Enter the number of portrait orient Cruisers for each player <span id="portraitLabelNum">(1-10)</span></label>
                 <input type="number" id="portraitNum" min="1" max="10" onchange='reportValidity()'  required>
@@ -25,11 +27,11 @@
                 <label for="landscapeNum">Enter the number of landscape orient Destroyers for each player <span id="landscapeLabelNum">(1-10)</span></label>
                 <input type="number" id="landscapeNum" min="1" max="10" onchange='reportValidity()' required>
 
-                <label for="minLength">Enter the mimimum length for each ship <span id="minLabelNum">(1-10)</span></label>
-                <input type="number" id="minLength" min="1" max="10" onchange='reportValidity()' required>
+                <label for="minLength">Enter the mimimum length for each ship <span id="minLabelNum">(1-8)</span></label>
+                <input type="number" id="minLength" min="1" max="8" onchange='reportValidity()' required>
 
-                <label for="maxLength">Enter the maximum length for each ship <span id="maxLabelNum">(1-19)</span> </label>
-                <input type="number" id="maxLength" min="1" max="19" onchange='reportValidity()'required>
+                <label for="maxLength">Enter the maximum length for each ship <span id="maxLabelNum">(1-8)</span> </label>
+                <input type="number" id="maxLength" min="1" max="8" onchange='reportValidity()'required>
 
                 <button type="button" id="playButton"> Play</button>
             </form>
