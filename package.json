@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest --run",
+    "test": "vitest --run --environment happy-dom",
     "build": "webpack --config webpack.config.js",
     "dev": "webpack serve"
   },
@@ -31,6 +31,7 @@
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.7.1",
     "style-loader": "^3.3.1",
+    "vanilla-tilt": "^1.7.2",
     "vitest": "^0.20.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",

@@ -13,14 +13,14 @@
     <body>
         <div class="formContainer">
             <form autocomplete="off"  id="form">
-                <h1 class="logo" >BattleShip</h1>
+                <h1 class="logo">BattleShip</h1>
                 <h1 id="formHeader"> Welcome Player 1, Enter your name:</h1>
                 <input type="text" id="text"  required>
             </form>
         </div>
         <div class="shipFormContainer">
-            <h1 class="logo" >BattleShip</h1>
             <form id="shipForm">
+                <h1 class="logo" >BattleShip</h1>
                 <label for="portraitNum">Enter the number of portrait orient Cruisers for each player <span id="portraitLabelNum">(1-10)</span></label>
                 <input type="number" id="portraitNum" min="1" max="10" onchange='reportValidity()'  required>
 

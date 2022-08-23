@@ -40,6 +40,8 @@
     font-family: var(--secondary-font);
     margin-bottom: 50px;
     padding: 20px;
+    transform: translateZ(60px);
+    
 }
 
 #player1Header, #player2Header{
@@ -104,7 +106,12 @@
 #form, #shipForm{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    padding:30px;
+    border-radius: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
 }
 
 #playerTurn{
@@ -170,6 +177,10 @@ button{
 label{
     font-family: var(--main-font);
     font-size: 1.4rem;
+}
+
+img{
+    width: 30px;
 }
 
 body{

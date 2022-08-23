@@ -1,14 +1,30 @@
-import {it, expect} from 'vitest'
-import {addition} from './src/index'
+// @vitest-environment happy-dom
 
-it('should add the numbers',()=>{
-    //arrange
-    const a = 1
-    const b = 2
-    //act
-    const result = addition(a,b)
-    //assert
-    const expectedResult = a + b
-    expect(result).toBe(expectedResult)
+import {it, expect, describe} from 'vitest'
+import {player} from './src/Assets/modules/playerFactory'
+
+
+describe('player',()=>{
+    it("should store parameter as player name",()=>{
+        let playername = "john"
+
+        let player1 = new player(playername)
+
+        expect(player1.name).toBe(playername)
+    })
+
+    it("Should have 0 turns",()=>{
+        let playername = "john"
+
+        let player1 = new player(playername)
+
+        expect(player1.turn).toBe(0)
+    })
 })
+
+
+
+
+
+
 
