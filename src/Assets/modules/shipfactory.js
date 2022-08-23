@@ -39,7 +39,6 @@ const ship = (length, orient, player, gameBoardSize) => {
                         } else if (player == "playerTwo") {
                             allPlayer2Pos.push(finalPos);
                         }
-                        //allLandscapePos.push(finalPos);
                     }
                 } else {
                     console.log("landscape Pos already used" + initialPos);
@@ -53,7 +52,7 @@ const ship = (length, orient, player, gameBoardSize) => {
                     if (testPos % gameBoardLength == 0) {
                         console.log(testPos);
                         initialPos = initialPos + (i + 1);
-                        console.log("checking pos 1");
+                        console.log("checking pos One" + initialPos);
                         pushToArrayLandscape(initialPos);
                         return true;
                     }

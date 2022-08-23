@@ -11,16 +11,7 @@ import {ship} from './Assets/modules/shipfactory'
 
 let allPlayer1Pos = [];
 let allPlayer2Pos = [];
-
-
-
-
-//const albama = ship(8, "landscape", "playerOne");
-//const chicken = ship(6, "portrait", "playerTwo");
-
 let allShips = [];
-//console.log(allShips);
-
 let totalHits = [];
 
 const getAllInputs = (() => {
@@ -42,8 +33,6 @@ const getAllInputs = (() => {
     playerfield.onkeypress = function getplayer1name(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
-            //playerfield.setCustomValidity("Please enter a valid name")
-            //playerfield.reportValidity()
             if (playerfield.checkValidity()) {
                 playerfield.setCustomValidity("");
                 let player1 = new player(`${playerfield.value}`);
@@ -57,7 +46,6 @@ const getAllInputs = (() => {
         }
     };
     const getPlayer2Name = (player1) => {
-        //console.log(playerfield.value);
         formHeader.textContent = "Welcome Player 2, Enter your name:";
         playerfield.onkeypress = function (a) {
             if (a.keyCode == 13) {
@@ -145,7 +133,7 @@ const getAllInputs = (() => {
             //console.log(parseInt(minLength.value),maxLengthValue);
             maxLength.setCustomValidity("");
             form.reportValidity();
-            if (parseInt(maxLength.value) < parseInt(minLength.value)) {
+            if (parseInt(maxLength.value) <= parseInt(minLength.value)) {
                 maxLength.setCustomValidity("Maximum length must be more than minimum length");
                 maxLength.reportValidity();
             } else if (parseInt(maxLength.value) > parseInt(minLength.value) && form.checkValidity()) {
