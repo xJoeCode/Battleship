@@ -9,8 +9,8 @@ import {ship} from './Assets/modules/shipfactory'
 
 
 
-let allPlayer1Pos = [];
-let allPlayer2Pos = [];
+//let allPlayer1Pos = [];
+//let allPlayer2Pos = [];
 let allShips = [];
 let totalHits = [];
 
@@ -181,8 +181,8 @@ const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
     generateDestroyers(minLength, maxLength);
     generateScoreBoard(player1, player2);
     generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize);
-    console.log("all player 1 postions" + allPlayer1Pos);
-    console.log("all player 2 postions" + allPlayer2Pos);
+    //console.log("all player 1 postions" + allPlayer1Pos);
+    //console.log("all player 2 postions" + allPlayer2Pos);
 };
 
 const generateScoreBoard = (player1, player2) => {
