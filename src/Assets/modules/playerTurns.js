@@ -12,13 +12,13 @@ const generatePlayerTurns = (player1, player2, startingPlayer, gameBoardSize, al
     if (startingPlayer == "player1") {
         player1.turn++;
         playerturnHeader.textContent = `${player1.name}'s Turn`;
-        tileBackgroundColor(player1,player2)
+        tileBackgroundColor(player1, player2);
     } else if (startingPlayer == "player2") {
         player2.turn++;
         playerturnHeader.textContent = `${player2.name}'s Turn`;
-        tileBackgroundColor(player1,player2)
+        tileBackgroundColor(player1, player2);
     }
     generateboard(gameBoardSize, player1, player2, allShips);
 };
 
-export {generatePlayerTurns}
+export { generatePlayerTurns };

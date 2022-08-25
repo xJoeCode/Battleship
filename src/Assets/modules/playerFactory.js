@@ -4,5 +4,3 @@ export class player {
     }
     turn = 0;
 }
-
-

@@ -9,7 +9,6 @@ const ship = (length, orient, player, gameBoardSize) => {
     const shipPos = (player) => {
         let initialPos = Math.floor(Math.random() * gameBoardSize + 1);
         let gameBoardLength = Math.sqrt(gameBoardSize);
-        console.log(initialPos, length, player);
 
         if (orient === "landscape") {
             // to make sure all positions are placed correctly
@@ -22,15 +21,11 @@ const ship = (length, orient, player, gameBoardSize) => {
                     } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)) {
                         return true;
                     }
-                    //if (allLandscapePos.includes(tempPos)) {
-                    //    return true;
-                    //}
                 }
             };
 
             const pushToArrayLandscape = (initialPos) => {
                 if (!checkNoDuplicateLandscapePos(initialPos)) {
-                    console.log("pushing to array");
                     for (let i = 0; i < length; i++) {
                         let finalPos = initialPos + i;
                         position.push(player + finalPos);
@@ -50,16 +45,13 @@ const ship = (length, orient, player, gameBoardSize) => {
                 for (let i = 0; i < length; i++) {
                     let testPos = initialPos + i;
                     if (testPos % gameBoardLength == 0) {
-                        console.log(testPos);
                         initialPos = initialPos + (i + 1);
-                        console.log("checking pos One" + initialPos);
                         pushToArrayLandscape(initialPos);
                         return true;
                     }
                 }
             };
             if (!checkPosLandscape(initialPos)) {
-                console.log("checking pos 2");
                 pushToArrayLandscape(initialPos);
             }
         } else if (orient === "portrait") {
@@ -71,9 +63,6 @@ const ship = (length, orient, player, gameBoardSize) => {
                     } else if (player == "playerTwo" && allPlayer2Pos.includes(tempPos)) {
                         return true;
                     }
-                    //if (allPortraitPos.includes(tempPos)) {
-                    //    return true;
-                    //}
                 }
             };
 
@@ -83,7 +72,6 @@ const ship = (length, orient, player, gameBoardSize) => {
                     if (tempPos > gameBoardSize) {
                         initialPos = initialPos - (length - i) * gameBoardLength;
                         pushtoArrayPortrait(initialPos);
-                        console.log(initialPos + "checking pos 3");
                         return true;
                     }
                 }
@@ -98,7 +86,6 @@ const ship = (length, orient, player, gameBoardSize) => {
                         } else if (player == "playerTwo") {
                             allPlayer2Pos.push(initialPos + i * gameBoardLength);
                         }
-                        //allPortraitPos.push(initialPos + i * gameBoardLength);
                     }
                 } else {
                     console.log("Portrait Pos already used " + initialPos);
@@ -107,7 +94,6 @@ const ship = (length, orient, player, gameBoardSize) => {
             };
 
             if (!checkPosPortrait(initialPos)) {
-                console.log("checking pos 4");
                 pushtoArrayPortrait(initialPos);
             }
         }
@@ -116,4 +102,4 @@ const ship = (length, orient, player, gameBoardSize) => {
     return { getLength, position, hits, player };
 };
 
-export {ship}
+export { ship };

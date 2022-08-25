@@ -3,33 +3,28 @@ import "./style.css";
 import explosionIcon from "./Assets/explosion.png";
 import SinkIcon from "./Assets/sinking.png";
 import VanillaTilt from "vanilla-tilt";
-import {player} from './Assets/modules/playerFactory'
-import {ship} from './Assets/modules/shipfactory'
+import { player } from "./Assets/modules/playerFactory";
+import { ship } from "./Assets/modules/shipfactory";
 import { generateScoreBoard } from "./Assets/modules/scoreBoard";
 import { generatePlayerTurns } from "./Assets/modules/playerTurns";
 import { tileBackgroundColor } from "./Assets/modules/tileBackgroundColor";
 
-
-
-
-
-
 const getAllInputs = (() => {
-    const pagetilt = (backElement) =>{
-        VanillaTilt.init(backElement),{
-            max:30,
-            speed:100,
-
-        }
-    }
+    const pagetilt = (backElement) => {
+        VanillaTilt.init(backElement),
+            {
+                max: 30,
+                speed: 100,
+            };
+    };
 
     const playerfield = document.querySelector("#text");
     const formContainer = document.querySelector(".formContainer");
-    const form = document.querySelector("#form")
+    const form = document.querySelector("#form");
     const shipformContainer = document.querySelector(".shipFormContainer");
     const formHeader = document.querySelector("#formHeader");
-    const logo = document.querySelector(".logo")
-    pagetilt(form)
+    const logo = document.querySelector(".logo");
+    pagetilt(form);
     playerfield.onkeypress = function getplayer1name(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
@@ -104,11 +99,9 @@ const getAllInputs = (() => {
         let landscapeInput = document.querySelector("#landscapeNum");
         let minLength = document.querySelector("#minLength");
         let maxLength = document.querySelector("#maxLength");
-        //let minLengthValue = parseInt(document.querySelector("#minLength").value)
-        //let maxLengthValue = parseInt(document.querySelector("#maxLength").value)
         let form = document.querySelector("#shipForm");
 
-        pagetilt(form)
+        pagetilt(form);
 
         if (gameBoardSize === "small") {
             gameBoardSize = 100;
@@ -145,8 +138,7 @@ const getAllInputs = (() => {
 })();
 
 const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
-    let allShips = []
-    //const shipformContainer = document.querySelector(".shipFormContainer");
+    let allShips = [];
     const cruisersNum = document.querySelector("#portraitNum").value;
     const destroyersNum = document.querySelector("#landscapeNum").value;
     let maxLength = parseInt(document.querySelector("#maxLength").value);
@@ -182,13 +174,3 @@ const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
     generateScoreBoard(player1, player2, allShips);
     generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize, allShips);
 };
-
-
-
-
-
-
-
-
-
-

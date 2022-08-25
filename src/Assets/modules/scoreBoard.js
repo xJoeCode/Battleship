@@ -1,8 +1,5 @@
-
-
-
 const generateScoreBoard = (player1, player2, allShips) => {
-    console.log(allShips)
+    console.log(allShips);
     const player1Score = document.querySelector("#player1Score");
     const player2Score = document.querySelector("#player2Score");
     const playerTurnHeader = document.querySelector("#playerTurn");
@@ -24,4 +21,4 @@ const generateScoreBoard = (player1, player2, allShips) => {
     return true;
 };
 
-export{generateScoreBoard}
+export { generateScoreBoard };

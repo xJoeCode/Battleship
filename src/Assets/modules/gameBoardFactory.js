@@ -2,9 +2,8 @@ import { checkHits, checkShipDestroyed } from "./checkHits";
 import { generateScoreBoard } from "./scoreBoard";
 import { tileBackgroundColor } from "./tileBackgroundColor";
 
-
 const generateboard = (gameBoardSize, player1, player2, allShips) => {
-    let totalHits = []
+    let totalHits = [];
     const player1gameTile = document.querySelector("#player1GameTile");
     const player2gameTile = document.querySelector("#player2GameTile");
     const gameContainer1 = document.querySelector(".gameContainer1");
@@ -23,7 +22,6 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
         for (let i = 0; i < gameBoardSize; i++) {
             const tile = playerTile.cloneNode();
             tile.setAttribute("data-key", i + 1);
-            //tile.setAttribute("data-id", player1)
 
             const attackShip = (e, player1, player2) => {
                 const tile = e.target.getAttribute("data-id");
@@ -31,12 +29,10 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                 if (tile == "playerOne" && player1.turn == 1) {
                     e.target.classList.add("hit");
                     const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
-                    //console.log(hitNum);
                     totalHits.push(hitNum);
-                    checkHits(player1,player2,allShips,totalHits);
-                    //generateScoreBoard(player1,player2);
+                    checkHits(player1, player2, allShips, totalHits);
                     checkShipDestroyed(allShips);
-                    if (generateScoreBoard(player1, player2,allShips)) {
+                    if (generateScoreBoard(player1, player2, allShips)) {
                         return true;
                     } else {
                         player1.turn = 0;
@@ -46,11 +42,10 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                 } else if (tile == "playerTwo" && player2.turn == 1) {
                     e.target.classList.add("hit");
                     const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
-                    console.log(hitNum);
                     totalHits.push(hitNum);
-                    checkHits(player1, player2,allShips,totalHits);
+                    checkHits(player1, player2, allShips, totalHits);
                     checkShipDestroyed(allShips);
-                    if (generateScoreBoard(player1, player2,allShips)) {
+                    if (generateScoreBoard(player1, player2, allShips)) {
                         return true;
                     } else {
                         player1.turn = 0;
@@ -62,20 +57,18 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
 
             tile.onclick = function (e) {
                 if (player1.turn == 1) {
-                    //playerturnHeader.textContent = `${player1.name}'s Turn`
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
                         player2.turn++;
-                        tileBackgroundColor(player1,player2)
+                        tileBackgroundColor(player1, player2);
                     }
                 } else if (player2.turn == 1) {
-                    //playerturnHeader.textContent = `${player2.name}'s Turn`
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player1.name}'s Turn`;
                         player2.turn--;
                         player1.turn++;
-                        tileBackgroundColor(player1,player2)
+                        tileBackgroundColor(player1, player2);
                     }
                 }
             };
@@ -91,4 +84,4 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
     });
 };
 
-export{generateboard}
+export { generateboard };
