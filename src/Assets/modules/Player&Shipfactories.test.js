@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
 
 import {it, expect, describe} from 'vitest'
-import {player} from './src/Assets/modules/playerFactory'
-import {ship} from './src/Assets/modules/shipfactory'
+import {player} from './playerFactory'
+import {ship} from './shipfactory'
 
 
 describe('player',()=>{
