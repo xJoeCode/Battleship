@@ -4,7 +4,9 @@ import { ship } from "./shipfactory";
 import { generateboard } from './gameBoardFactory'
 import { checkHits } from "./checkHits";
 import { checkShipDestroyed } from "./checkHits";
+import { tileBackgroundColor } from "./tileBackgroundColor";
 import  explosionIcon  from "../../Assets/explosion.png";
+import  SinkIcon  from "../../Assets/sinking.png";
 import { beforeEach,describe, expect, it, vi } from "vitest";
 import path from 'path';
 import fs from 'fs';
@@ -142,6 +144,49 @@ describe("checkhits",()=>{
 
 describe("checkShipDestroyed",()=>{
     it("should add a sick icon if ship hits array matches its position array",()=>{
+        let allShips = []
+        let totalHits = []
+        let testPlayer1 = new player('john')
+        let testPlayer2 = new player('Marcus')
+
+        for(let i = 0; i < 3; i++){
+            let player1cruisers = ship(5, "portrait", "playerOne", 100);
+            let player2cruisers = ship(5, "portrait", "playerTwo", 100)
+            allShips.push(player1cruisers,player2cruisers);
+        }
+        generateboard(100, testPlayer1,testPlayer2,allShips)
+        let player1Ships = allShips.filter((ship) => ship.player == "playerOne")
+        player1Ships.forEach(ship=>{
+            ship.hits = [...ship.position]
+        })
+
+
+        totalHits = [...player1Ships[0].hits]
+        checkHits(testPlayer1,testPlayer2,player1Ships,totalHits)
+        checkShipDestroyed(player1Ships)
+        const hitdDataKey = (player1Ships[0].position[0].substr(9,12))
         
+        let player1HitTile = document.querySelector(`[data-key="${hitdDataKey}"][data-id="playerOne"]`)
+
+        expect(player1HitTile.firstElementChild.src).toBe(SinkIcon)
+
+    })
+})
+
+describe("tileBackgroundColor",()=>{
+    it("Should have a background color if player has a turn",()=>{
+        //let allShips = []
+        let testPlayer1 = new player('john')
+        let testPlayer2 = new player('Marcus')
+        testPlayer1.turn++
+
+        //generateboard(100, testPlayer1,testPlayer2,allShips)
+        tileBackgroundColor(testPlayer1,testPlayer2)
+
+
+        const player1Container = document.querySelector(".gameContainer1")
+        const player2Container = document.querySelector(".gameContainer2")
+        expect(player1Container.style.backgroundColor).toBe("#8C4236")
+        expect(player2Container.style.backgroundColor).toBe("transparent")
     })
 })

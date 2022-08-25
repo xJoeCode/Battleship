@@ -12,10 +12,7 @@ import { tileBackgroundColor } from "./Assets/modules/tileBackgroundColor";
 
 
 
-//let allPlayer1Pos = [];
-//let allPlayer2Pos = [];
-//let allShips = [];
-//let totalHits = [];
+
 
 const getAllInputs = (() => {
     const pagetilt = (backElement) =>{
@@ -180,19 +177,14 @@ const generateShips = (player1, player2, startingPlayer, gameBoardSize) => {
             allShips.push(player1Destroyers, player2Destroyers);
         }
     };
-
-    
-
     generateCruisers(minLength, maxLength);
     generateDestroyers(minLength, maxLength);
     generateScoreBoard(player1, player2, allShips);
     generatePlayerTurns(player1, player2, startingPlayer, gameBoardSize, allShips);
-    //console.log("all player 1 postions" + allPlayer1Pos);
-    //console.log("all player 2 postions" + allPlayer2Pos);
 };
 
 
-export {explosionIcon, SinkIcon}
+
 
 
 
