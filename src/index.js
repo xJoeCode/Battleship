@@ -30,7 +30,7 @@ const getAllInputs = (() => {
             e.preventDefault();
             if (playerfield.checkValidity()) {
                 playerfield.setCustomValidity("");
-                let player1 = new player(`${playerfield.value}`);
+                let player1 = new player(`${playerfield.value.toUpperCase()}`);
                 getPlayer2Name(player1);
                 playerfield.value = "";
             } else {
@@ -47,7 +47,7 @@ const getAllInputs = (() => {
                 a.preventDefault();
                 playerfield.reportValidity();
                 if (playerfield.checkValidity()) {
-                    let player2 = new player(`${playerfield.value}`);
+                    let player2 = new player(`${playerfield.value.toUpperCase()}`);
                     playerfield.value = "";
                     getStartingPlayer(player1, player2);
                 }

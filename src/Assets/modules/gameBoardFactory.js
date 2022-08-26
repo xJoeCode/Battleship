@@ -1,4 +1,5 @@
 import { checkHits, checkShipDestroyed } from "./checkHits";
+import { player } from "./playerFactory";
 import { generateScoreBoard } from "./scoreBoard";
 import { tileBackgroundColor } from "./tileBackgroundColor";
 
@@ -17,16 +18,42 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
         gameContainer2.style.gridTemplateRows = "repeat(21, 1fr)";
     }
 
+    const computerMove = (player1,player2) =>{
+        if (player1.turn == 1 && player1.name === "COMPUTER"){
+            let tile = selectRandomTile(player1,'playerOne')
+            tile.click()
+            } else if(player2.turn == 1 && player2.name === "COMPUTER"){
+                let tile = selectRandomTile(player2,'playerTwo')
+                tile.click()
+            }
+        } 
+
+    const selectRandomTile = (player, whichPlayer) =>{
+        while (true){
+            let tileNum = (Math.floor(Math.random() * gameBoardSize) + 1).toString()
+            console.log(tileNum)
+            if(!totalHits.find(element => tileNum == element)){
+                //const tile = whichPlayer.concat('',tileNum)
+                const tileElement = document.querySelector(`[data-id="${whichPlayer}"][data-key="${tileNum}"]`)
+                console.log(tileElement)
+                console.log(whichPlayer)
+                return tileElement
+            }
+        }
+    }
+
     const playerTiles = [player1gameTile, player2gameTile];
     playerTiles.forEach((playerTile) => {
         for (let i = 0; i < gameBoardSize; i++) {
             const tile = playerTile.cloneNode();
             tile.setAttribute("data-key", i + 1);
 
+            
+
             const attackShip = (e, player1, player2) => {
                 const tile = e.target.getAttribute("data-id");
                 console.log(tile);
-                if (tile == "playerOne" && player1.turn == 1) {
+                if (tile == "playerOne" && player1.turn == 1 ) {
                     e.target.classList.add("hit");
                     const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
                     totalHits.push(hitNum);
@@ -39,7 +66,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                         player2.turn = 0;
                         return false;
                     }
-                } else if (tile == "playerTwo" && player2.turn == 1) {
+                } else if (tile == "playerTwo" && player2.turn == 1 ) {
                     e.target.classList.add("hit");
                     const hitNum = e.target.getAttribute("data-id") + e.target.getAttribute("data-key");
                     totalHits.push(hitNum);
@@ -52,16 +79,18 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                         player2.turn = 0;
                         return false;
                     }
-                }
+                } 
             };
 
-            tile.onclick = function (e) {
+
+            tile.onclick = function(e) {
                 if (player1.turn == 1) {
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
                         player2.turn++;
                         tileBackgroundColor(player1, player2);
+                        computerMove(player1,player2)
                     }
                 } else if (player2.turn == 1) {
                     if (attackShip(e, player1, player2)) {
@@ -69,6 +98,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                         player2.turn--;
                         player1.turn++;
                         tileBackgroundColor(player1, player2);
+                        computerMove(player1,player2)
                     }
                 }
             };
@@ -82,6 +112,8 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
         player1gameTile.remove();
         player2gameTile.remove();
     });
+
+    computerMove(player1,player2)
 };
 
 export { generateboard };
