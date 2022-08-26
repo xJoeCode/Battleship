@@ -12,6 +12,7 @@
     cursor: pointer;
     display: grid;
     place-content: center;
+    box-sizing: border-box;
 }
 #player1GameTile:hover, #player2GameTile:hover{
     background-color: #8C4236;
@@ -26,10 +27,9 @@
 
 .gameContainer1, .gameContainer2{
     margin: 1rem;
-    width: 60rem;
-    height: 60rem;
+    width: 42rem;
+    height: 42rem;
     place-items: center;
-    overflow: hidden;
     display: none;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(11, 1fr);
@@ -46,15 +46,16 @@
 
 #player1Header, #player2Header{
     grid-column: 1/-1;
-    font-size: 3rem;
-    margin: 1rem;
-    padding: 1.5rem;
+    font-size: 2rem;
+    height: auto;
     font-family: var(--main-font);
     
 }
 
 .hitImage{
-    width: 40px;
+    width: 90%;
+    height: 90%;
+    background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -116,7 +117,7 @@
 
 #playerTurn{
     font-family: var(--main-font);
-    font-size: 4rem;
+    font-size: 3.5rem;
     margin-top: 20px;
     border-bottom: 1px solid black;
     
@@ -125,7 +126,7 @@
 
 #player1Score, #player2Score{
     font-family: var(--main-font);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     margin: 15px;
 }
 
