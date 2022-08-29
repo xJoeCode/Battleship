@@ -71,7 +71,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
 
 
             tile.onclick = function(e) {
-                if (player1.turn == 1) {
+                if (player1.turn == 1 && !e.target.classList.contains("hit")) {
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
@@ -79,7 +79,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                         tileBackgroundColor(player1, player2);
                         computerMove(player1,player2, gameBoardSize)
                     }
-                } else if (player2.turn == 1) {
+                } else if (player2.turn == 1 && !e.target.classList.contains("hit")) {
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player1.name}'s Turn`;
                         player2.turn--;

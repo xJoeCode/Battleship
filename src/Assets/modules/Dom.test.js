@@ -74,9 +74,11 @@ describe("generateScoreBoard", () => {
 
 describe("generateboard", () => {
     it("Should generate correct number of game tiles based on value given", () => {
+        let testPlayer1 = new player("john");
+        let testPlayer2 = new player("Marcus");
         let numberOfTiles = 100;
 
-        generateboard(numberOfTiles);
+        generateboard(numberOfTiles,testPlayer1,testPlayer2);
         const gameTiles = document.querySelectorAll('[Data-id="playerOne"]');
 
         expect(gameTiles.length).toBe(numberOfTiles);
