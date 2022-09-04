@@ -3,6 +3,24 @@
     --secondary-font: 'East Sea Dokdo';
 }
 
+@keyframes disappear {
+    from {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
+    90%{
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
 #player1GameTile, #player2GameTile{
     background-color: #8C6636;
     width: 100%;
@@ -72,6 +90,7 @@
     justify-content: center;
     align-items: center;
     transition: transform 1s ease-in-out;
+
 }
 
 .shipFormContainer{
@@ -97,11 +116,16 @@
 }
 .shipFormContainer.moved.slideDown{
     transform: translateY(-100vh) rotate(180deg);
-    opacity: 1;
+    animation: disappear 1s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
 }
 
 .formContainer.moved{
     transform: translateY( 100vh) rotate(180deg);
+    animation: disappear 1s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
 }
 
 #form, #shipForm{
@@ -169,7 +193,7 @@ h1{
 button{
     width: 200px;
     height: 50px;
-    background-color: #28683B;
+    background-color: #8C4236;
     box-shadow: 2px 2px 2px rgb(53, 53, 53);
     cursor: pointer;
     border: none;
