@@ -28,6 +28,8 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                 computerHit("playerTwo",computerHitsArray,gameBoardSize)
             }
         }
+
+
     
 
     const playerTiles = [player1gameTile, player2gameTile];
@@ -37,6 +39,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
             tile.setAttribute("data-key", i + 1);
 
             
+            //const attackTimeOut = setTimeout((e,player1,player2) => attackShip(e,player1,player2),3000,e,player1,player2)
 
             const attackShip = (e, player1, player2) => {
                 const tile = e.target.getAttribute("data-id");
@@ -70,14 +73,14 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
             };
 
 
-            tile.onclick = function(e) {
+            tile.onclick = function(e, timedComputerMove) {
                 if (player1.turn == 1 && !e.target.classList.contains("hit")) {
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;
                         player1.turn--;
                         player2.turn++;
                         tileBackgroundColor(player1, player2);
-                        computerMove(player1,player2, gameBoardSize)
+                        setTimeout((player1,player2, gameBoardSize) => {computerMove(player1,player2, gameBoardSize)},1000, player1,player2, gameBoardSize);
                     }
                 } else if (player2.turn == 1 && !e.target.classList.contains("hit")) {
                     if (attackShip(e, player1, player2)) {
@@ -85,7 +88,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
                         player2.turn--;
                         player1.turn++;
                         tileBackgroundColor(player1, player2);
-                        computerMove(player1,player2, gameBoardSize)
+                        setTimeout((player1,player2, gameBoardSize) => {computerMove(player1,player2, gameBoardSize)},1000, player1,player2, gameBoardSize);
                     }
                 }
             };
@@ -100,7 +103,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
         player2gameTile.remove();
     });
 
-    computerMove(player1,player2, gameBoardSize)
+    setTimeout((player1,player2, gameBoardSize) => {computerMove(player1,player2, gameBoardSize)},1000, player1,player2, gameBoardSize);
 };
 
 export { generateboard };
