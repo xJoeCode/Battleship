@@ -73,7 +73,7 @@ const generateboard = (gameBoardSize, player1, player2, allShips) => {
             };
 
 
-            tile.onclick = function(e, timedComputerMove) {
+            tile.onclick = function(e) {
                 if (player1.turn == 1 && !e.target.classList.contains("hit")) {
                     if (attackShip(e, player1, player2)) {
                         playerturnHeader.textContent = `${player2.name}'s Turn`;

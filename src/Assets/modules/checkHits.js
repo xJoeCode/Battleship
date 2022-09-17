@@ -31,22 +31,22 @@ const computerHit = (_player, hit, gameBoardSize) => {
                     const leftTile = document.querySelector(`[data-key="${parseInt(datakey) - 1}"][data-id="${dataid}"]`);
                     const topTile = document.querySelector(`[data-key="${parseInt(datakey) - gameBoardLength}"][data-id="${dataid}"]`);
                     const bottomTile = document.querySelector(`[data-key="${parseInt(datakey) + gameBoardLength}"][data-id="${dataid}"]`);
-                    if (rightTile !== null) {
+                    if (rightTile) {
                         if (!rightTile.classList.contains("hit")) {
                             console.log(rightTile)
                             rightTile.click();
                             surroundingHits.push("hit");
-                        } else if (leftTile !== null) {
+                        } else if (leftTile) {
                             if (!leftTile.classList.contains("hit")) {
                                 console.log(leftTile)
                                 leftTile.click();
                                 surroundingHits.push("hit");
-                            } else if (topTile !== null) {
+                            } else if (topTile) {
                                 if (!topTile.classList.contains("hit")) {
                                     console.log(topTile)
                                     topTile.click();
                                     surroundingHits.push("hit");
-                                } else if (bottomTile !== null) {
+                                } else if (bottomTile) {
                                     if (!bottomTile.classList.contains("hit")) {
                                         console.log(bottomTile)
                                         bottomTile.click();
