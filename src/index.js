@@ -123,7 +123,6 @@ const getAllInputs = (() => {
         }
         const playbutton = document.querySelector("#playButton");
         playbutton.onclick = function (b) {
-            //console.log(parseInt(minLength.value),maxLengthValue);
             maxLength.setCustomValidity("");
             form.reportValidity();
             if (parseInt(maxLength.value) <= parseInt(minLength.value)) {
